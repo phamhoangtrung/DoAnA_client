@@ -1,0 +1,26 @@
+<div class="container">
+  <div class="row justify-content-md-center">
+    <mat-card class="example-card">
+      <mat-card-title-group>
+        <mat-card-title *ngIf="!isEdit">{{user?.name}} </mat-card-title>
+
+        <mat-card-title *ngIf="isEdit">
+          <input matInput [(ngModel)]="name" />
+        </mat-card-title>
+
+
+        <mat-card-subtitle>Email: {{user?.email}}</mat-card-subtitle>
+        <!-- <img mat-card-xl-image src="https://materal.angular.io/assets/img/examples/shiba2.jpg"> -->
+      </mat-card-title-group>
+      <mat-card-content>
+        <p><strong>Age:</strong> {{user?.age}}</p>
+        <p><strong>Phone number:</strong> {{user?.phone}}</p>
+        <p><strong>Address:</strong> {{user?.address}}</p>
+        <p><strong>Member ship:</strong> Lv.{{user?.memberShip}}</p>
+        <p><strong> money spend:</strong> {{user?.totalBuy}}</p>
+        <button mat-button color="primary" (click)="edit()">edit</button>
+        <button *ngIf="isEdit" mat-button color="primary" (click)="update()">update</button>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

@@ -1,20 +1,44 @@
-<header>
-    <div class="navbar navbar-dark bg-primary shadow-sm">
-        <div class="navbar-brand align-item-center d-flex">
-            <i style="font-size: 40px;" class="fas fa-shipping-fast">&nbsp;
-                
-            </i>
-            <strong style="font-size: 30px;">Flipkart</strong>
-            <div class="form-group">
-                <input type="text" class="form-control" [(ngModel)]="searchTerm" (keyup)="search($event)" placeholder="search products">
-            </div>
-            <span class="fas fa-search search-icon"></span>
+<nav class="navbar bg-dark text-white nav-header">
+  <nav class="navbar bg- text-white">
+    <div class="container">
+      <div class="navbar-brand fw-bold ps-3">
+        <a routerLink="/products">LOGO</a>
+      </div>
+      <ul #navLinks class="nav-links d-flex m-0">
+        <li (click)="hideToggle()" class="hide-toggle">
+          <mat-icon>close</mat-icon>
+        </li>
+        <li><a class="nav-link" routerLink="/products" routerLinkActive="active">Home</a></li>
+        <!-- <li class="nav-link"><a routerLink="/" routerLinkActive="active">Contact us</a></li> -->
+        <li *ngIf="!authService.isAdmin">
+          <a [matBadgeHidden]="totalItem ===0" [matBadge]="totalItem" matBadgeColor="warn" class="nav-link"
+            routerLink="/cart" routerLinkActive="active">Cart</a>
+        </li>
+        <ng-container *ngIf="authService.isAdmin">
+          <li>
+            <a class="nav-link" routerLink="/admin/cart" routerLinkActive="active">Cart</a>
+          </li>
+          <li>
+            <a class="nav-link" routerLink="/admin/user" routerLinkActive="active">User</a>
+          </li>
+        </ng-container>
 
-
-        </div>
-        <button routerLink="cart" class="btn btn-primary">
-            <i style="font-size: 30px;" class="fas fa-cart-plus"></i>
-            <div style="font-size: 10px;" class="badge bg-danger">{{totalItem}}</div>
-        </button>
+        <li *ngIf="!isLogin">
+          <a class="nav-link" routerLink="/signin" routerLinkActive="active">Sign in</a>
+        </li>
+        <ng-container *ngIf="isLogin">
+          <li>
+            <a class="nav-link" routerLink="/user">
+              <mat-icon>account_circle</mat-icon>
+            </a>
+          </li>
+          <li> <a class="nav-link" (click)="signOut()"> Sign out </a> </li>
+        </ng-container>
+      </ul>
+      <div (click)="toggleMenu()" class="menu-toggle">
+        <i class="d-sm-block d-sm-none gg-menu-right"></i>
+        <mat-icon>menu open</mat-icon>
+      </div>
     </div>
-</header>
+  </nav>
+</nav>

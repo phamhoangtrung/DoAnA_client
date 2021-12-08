@@ -1,0 +1,86 @@
+<h1 mat-dialog-title>{{ title }}</h1>
+<div mat-dialog-content>
+  <form [formGroup]="productForm">
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Product name</mat-label>
+      <input matInput formControlName="name" />
+      <mat-error *ngIf="name?.hasError('required')">
+        Product name is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Product price</mat-label>
+      <input matInput formControlName="price" />
+      <mat-error *ngIf="price?.hasError('required')">
+        Product price is required
+      </mat-error>
+      <mat-error *ngIf="price?.hasError('notNumber')">
+        Product price is must not contain character
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Sale percent</mat-label>
+      <input matInput formControlName="sale" />
+      <mat-error *ngIf="sale?.hasError('required')">
+        Sale percent is required
+      </mat-error>
+      <mat-error *ngIf="sale?.hasError('notNumber')">
+        Sale percent is must not contain character
+      </mat-error>
+      <mat-error *ngIf="sale?.hasError('isGraterThan')">
+        Sale percent is must not grater than 99
+      </mat-error>
+      <mat-error *ngIf="sale?.hasError('isLowerThan')">
+        Sale percent is must not lower than 0
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Gender</mat-label>
+      <mat-select formControlName="gender">
+        <mat-option *ngFor="let sel of selection.gender" [value]="sel">{{
+          sel
+        }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="gender?.hasError('required')">
+        Product gender is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field class="example-full-width" appearance="fill">
+      <mat-label>Type</mat-label>
+      <mat-select formControlName="type">
+        <mat-option *ngFor="let sel of selection.type" [value]="sel">{{
+          sel
+        }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="type?.hasError('required')">
+        Product type is required
+      </mat-error>
+    </mat-form-field>
+
+    <ng-container *ngIf="data">
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Rating</mat-label>
+        <input matInput [value]="data.rating" disabled />
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Favorite food</mat-label>
+        <input matInput [value]="data.createdAt" disabled />
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Favorite food</mat-label>
+        <input matInput [value]="data.updatedAt" disabled />
+      </mat-form-field>
+    </ng-container>
+  </form>
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button (click)="handleSubmit()" cdkFocusInitial>OK</button>
+</div>

@@ -1,43 +1,102 @@
-<div class="card-top container-fluid">
-    <div class="container d-flex">
-        <div class="item">
-            <a (click)="filter('')">
-                <img src="https://rukminim1.flixcart.com/flap/128/128/image/f15c02bfeb02d15d.png?q=100" alt="">
-                <h6>All products</h6>
-            </a>
-        </div>
-        <div class="item">
-            <a (click)="filter('electronics')">
-                <img src="https://rukminim1.flixcart.com/flap/128/128/image/69c6589653afdb9a.png?q=100" alt="">
-                <h6>Electronics</h6>
-            </a>
-        </div>
-        <div class="item">
-            <a (click)="filter('fashion')">
-                <img src="https://rukminim1.flixcart.com/flap/128/128/image/82b3ca5fb2301045.png?q=100" alt="">
-                <h6>Fashion</h6>
-            </a>
-        </div>
-        <div class="item">
-            <a (click)="filter('jewelery')">
-                <img style="width: 62px; margin-top: 5px;" src="https://rukminim1.flixcart.com/image/580/696/kkh6zrk0/jewellery-set/o/w/z/gt-ns-862-matushri-art-original-imafzt9teacakjyn.jpeg?q=50" alt="">
-                <h6>Jewllery</h6>
-            </a>
-        </div>
-    </div>
-</div>
-
 <div class="container">
-    <div class="row">
-        <ng-container *ngFor="let item of filterCategory | filter:searchKey:'title'">
-            <div class="card col-md-3">
-                <img src="{{item.image}}" alt="">
-                <h5 style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;max-width: 100ch;">{{item.title}}</h5>
-                <p style="white-space: nowrap;overflow: hidden;text-overflow: ellipsis;max-width: 100ch;">{{item.description}}</p>
-                <p><strong>Price:</strong> ${{item.price}}</p>
-                <button class="btn btn-primary" (click)=addtocart(item)>Add to cart</button>
-            </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="form-group">
+        <div class="input">
+          <input type="text" class="form-control" [formControl]="searchTerm" placeholder="search products" />
+          <mat-icon class="icon" aria-hidden="false" aria-label="Example home icon">search</mat-icon>
+        </div>
+        <ng-container *ngIf="authService.isAdmin">
+          <button mat-flat-button (click)="createProduct()">
+            <mat-icon>add</mat-icon>
+          </button>
         </ng-container>
-
+      </div>
     </div>
+  </div>
+  <div class="row">
+    <ng-container *ngIf="!authService.isAdmin">
+      <ng-container *ngFor="let item of productList">
+        <div class="col-xl-3 col-sm-6">
+          <div class="card">
+            <app-badge [isHidden]="item.sale === 0" [content]="item.sale + '%'"></app-badge>
+            <h5 class="field"> {{ item.name }} </h5>
+            <p class="field"> {{ item.rating }} </p>
+            <p class="field"> {{ item.gender }} </p>
+            <p class="field"> {{ item.type }} </p>
+            <p><strong>Price:</strong> {{ item.price }}$</p>
+            <button class="btn btn-primary" (click)="addToCart(item)">
+              Add to cart
+            </button>
+          </div>
+        </div>
+      </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="authService.isAdmin">
+      <div class="col-12 pt-3">
+        <table [style]="{ width: '100%' }" mat-table [dataSource]="productList" class="mat-elevation-z8">
+          <ng-container matColumnDef="no">
+            <th mat-header-cell *matHeaderCellDef>No.</th>
+            <td mat-cell *matCellDef="let product">{{ product.index }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Name</th>
+            <td mat-cell *matCellDef="let product">{{ product.name }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="rating">
+            <th mat-header-cell *matHeaderCellDef>Rating</th>
+            <td mat-cell *matCellDef="let product">{{ product.rating }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="price">
+            <th mat-header-cell *matHeaderCellDef>Price</th>
+            <td mat-cell *matCellDef="let product">{{ product.price }}$</td>
+          </ng-container>
+
+          <ng-container matColumnDef="sale">
+            <th mat-header-cell *matHeaderCellDef>Sale</th>
+            <td mat-cell *matCellDef="let product">{{ product.sale }}%</td>
+          </ng-container>
+
+          <ng-container matColumnDef="createdAt">
+            <th mat-header-cell *matHeaderCellDef>Created At</th>
+            <td mat-cell *matCellDef="let product">
+              {{ product.createdAt | date }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="updatedAt">
+            <th mat-header-cell *matHeaderCellDef>Updated At</th>
+            <td mat-cell *matCellDef="let product">
+              {{ product.updatedAt | date }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>Action</th>
+            <td mat-cell *matCellDef="let product">
+              <mat-icon (click)="removeItem(product)">delete</mat-icon>
+              <mat-icon (click)="updateProduct(product)">update</mat-icon>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+    </ng-container>
+  </div>
 </div>
+
+<div *ngIf="productList?.length !== 0; else elseBlock">
+  <mat-paginator #paginator [length]="length" [pageSize]="10" (page)="onPageChange($event)" aria-label="Select page">
+  </mat-paginator>
+</div>
+<ng-template #elseBlock>
+  <div class="col-12">
+    <h1 class="no-content">No item found.</h1>
+  </div>
+</ng-template>

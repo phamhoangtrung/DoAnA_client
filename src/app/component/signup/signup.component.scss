@@ -1,0 +1,11 @@
+.sign-form {
+  display: flex;
+  .left-form {
+    flex: 1;
+    padding-right: 30px;
+  }
+  .right-form {
+    flex: 1;
+    padding-left: 30px;
+  }
+}

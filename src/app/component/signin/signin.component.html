@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <form [formGroup]="signinForm" (ngSubmit)="handleSubmit()" class="app-form col-xl-4 col-md-8 col-10">
+      <h3>Sign in here</h3>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input formControlName="email" type="text" [ngClass]="{ 'invalid': email?.touched && email?.invalid }"
+          placeholder="Email or Phone" id="email">
+        <span class="invalid-feedback">
+          <ng-container *ngIf="email?.touched">
+            <span *ngIf="email?.hasError('required') ">Email is required</span>
+            <span *ngIf="email?.hasError('email')">Invalid email.</span>
+          </ng-container>
+        </span>
+      </div>
+
+
+      <label for="password">Password</label>
+      <input formControlName="password" type="password" [ngClass]="{ 'invalid': pwd?.touched && pwd?.invalid }"
+        placeholder="Password" id="password">
+      <span class="invalid-feedback">
+        <ng-container *ngIf="pwd?.touched">
+          <span *ngIf="pwd?.hasError('required') ">Password is required</span>
+        </ng-container>
+      </span>
+
+      <button class="btn btn-primary">Sign in</button>
+
+      <h4 class="pt-3 text-center">Don't have account? <a routerLink="/signup">Sign up</a></h4>
+    </form>
+  </div>
+</div>

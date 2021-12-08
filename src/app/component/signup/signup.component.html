@@ -1,0 +1,97 @@
+<div class="container">
+  <div class="row justify-content-center">
+    <form [formGroup]="signupForm" (ngSubmit)="handleSubmit()" class="app-form col-8">
+      <h3>Sign up here</h3>
+      <div class="sign-form">
+        <div class="left-form">
+
+          <label for="text">Name</label>
+          <input formControlName="name" type="text" [ngClass]="{ 'invalid': name?.touched && name?.invalid }"
+            placeholder="Ex: Mr.A" id="name">
+          <span class="invalid-feedback">
+            <ng-container *ngIf="name?.invalid && (name?.dirty || name?.touched)">
+              <span *ngIf="name?.hasError('required') ">Name is required.</span>
+            </ng-container>
+          </span>
+
+
+          <label for="text">Age</label>
+          <input formControlName="age" [ngClass]="{ 'invalid': age?.touched && age?.invalid }" type="text"
+            placeholder="Ex: 18" id="age">
+          <span class="invalid-feedback">
+            <ng-container *ngIf="age?.touched">
+              <span *ngIf="age?.hasError('required') ">Age is required</span>
+              <span *ngIf="age?.hasError('min')">Age must not lower than 0.</span>
+              <span *ngIf="age?.hasError('max')">Age must not grater than 100.</span>
+            </ng-container>
+          </span>
+
+
+          <label for="text">Address</label>
+          <input formControlName="address" [ngClass]="{ 'invalid': addr?.touched && addr?.invalid }" type="text"
+            placeholder="Ex: abc" id="address">
+          <span class="invalid-feedback">
+            <ng-container *ngIf="addr?.touched">
+              <span *ngIf="addr?.hasError('required') ">Address is required</span>
+            </ng-container>
+          </span>
+
+          <label for="text">Phone number</label>
+          <input formControlName="phone" [ngClass]="{ 'invalid': phone?.touched && phone?.invalid }" type="text"
+            placeholder="Ex: +84-XXX-XXXX" id="phone">
+          <span class="invalid-feedback">
+            <ng-container *ngIf="phone?.touched">
+              <span *ngIf="phone?.hasError('required') ">Phone is required</span>
+            </ng-container>
+          </span>
+        </div>
+
+        <div class="right-form">
+
+          <label for="email">Username</label>
+          <input formControlName="email" [ngClass]="{ 'invalid': email?.touched && email?.invalid }" type="email"
+            placeholder="Ex: abc@gmail.com" id="email">
+          <span class="invalid-feedback">
+            <ng-container *ngIf="email?.touched">
+              <span *ngIf="email?.hasError('required') ">Email is required</span>
+              <span *ngIf="email?.hasError('email')">Invalid email.</span>
+              <span *ngIf="email?.hasError('usernameDuplicated')">Email existed.</span>
+            </ng-container>
+          </span>
+
+          <label for="password">Password</label>
+          <input formControlName="password" [ngClass]="{ 'invalid': pwd?.touched && pwd?.invalid }" type="password"
+            placeholder="Ex: *******" id="password">
+          <span class="invalid-feedback">
+            <ng-container *ngIf="pwd?.touched">
+              <span *ngIf="pwd?.hasError('required') ">Password is required</span>
+              <span *ngIf="pwd?.hasError('minlength') ">Password min length is 4</span>
+            </ng-container>
+          </span>
+
+          <label for="password">Confirm password</label>
+          <input formControlName="confirmPassword" [ngClass]="{ 'invalid': cPwd?.touched && cPwd?.invalid }"
+            type="password" placeholder="Ex: *******" id="confirmPassword">
+          <span class="invalid-feedback">
+            <ng-container *ngIf="cPwd?.touched">
+              <span *ngIf="cPwd?.hasError('required') ">Confirm password is required</span>
+              <span *ngIf="cPwd?.hasError('passwordsMatch') ">Confirm password is not match</span>
+            </ng-container>
+          </span>
+
+          <button class="btn btn-primary">Sign up</button>
+
+          <h4 class="pt-3 text-center">Back to <a routerLink="/signin">Sign in</a></h4>
+        </div>
+      </div>
+
+
+
+
+
+
+    </form>
+
+
+  </div>
+</div>

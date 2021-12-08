@@ -1,41 +1,100 @@
 .card-top {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    word-wrap: break-word;
-    background: #fff;
-    background-clip: border-box;
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: .25rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.25rem;
 }
 
 .item img {
-    width: 64px;
+  width: 64px;
 }
 
 .item {
-    margin: 0px 15px;
-    text-align: center;
+  margin: 0px 15px;
+  text-align: center;
 }
 
 .item a:hover {
-    color: blue;
+  color: blue;
 }
 
 .card {
-    padding: 20px;
-    margin: 50px;
+  max-width: 90%;
+  padding: 10px;
+  margin: 20px;
+  border-radius: 5px;
 }
 
 .card img {
-    width: 200px;
-    height: 200px;
-    margin-bottom: 15px;
-    transition: 0.3s ease-in-out;
+  // width: 200px;
+  // height: 200px;
+  margin-bottom: 15px;
+  transition: 0.3s ease-in-out;
 }
 
 .card img:hover {
-    transition: 0.3s ease-in-out;
-    transform: scale(1.1);
+  transition: 0.3s ease-in-out;
+  transform: scale(1.1);
+}
+
+.form-group {
+  position: relative;
+}
+
+.form-control {
+  border-radius: 3px;
+}
+.input {
+  position: relative;
+  flex: 1;
+}
+.icon {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.no-content {
+  font-weight: 500;
+  color: gray;
+  text-align: center;
+  margin-top: 2em;
+}
+
+mat-paginator {
+  background-color: transparent;
+  color: #3a3f44;
+}
+
+mat-icon {
+  cursor: pointer;
+}
+
+mat-icon:hover {
+  color: #f44336;
+  transition: color 0.3s ease;
+}
+
+table {
+  th,
+  td {
+    text-align: center;
+  }
+}
+
+.form-group {
+  display: flex;
+}
+
+.field {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100ch;
 }
