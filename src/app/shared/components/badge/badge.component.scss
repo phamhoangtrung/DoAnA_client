@@ -1,11 +1,10 @@
 .badge {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 50%;
+  right: 1em;
   transform: translate(1em, -0.5em);
   background-color: hsl(10deg 100% 60%);
   font-size: 18px;
-  line-height: 0;
   font-weight: 500;
   color: #fff;
   padding: 1.1em;

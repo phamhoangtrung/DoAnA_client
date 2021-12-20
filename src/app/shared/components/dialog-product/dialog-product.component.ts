@@ -1,9 +1,11 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Product } from 'src/app/models/product.model';
 import { Selection } from 'src/app/models/share.model';
 import { ApiService } from 'src/app/service/api.service';
+import { environment } from 'src/environments/environment';
 import { numberValidator } from '../../validator/number.validator';
 import { rangeValidator } from '../../validator/range.validator';
 
@@ -14,17 +16,45 @@ import { rangeValidator } from '../../validator/range.validator';
 })
 export class DialogProductComponent implements OnInit {
   productForm!: FormGroup;
+  file!: File;
   selection!: Selection;
   constructor(
     private builder: FormBuilder,
     public dialogRef: MatDialogRef<DialogProductComponent>,
     private api: ApiService,
+    private http: HttpClient,
     @Inject(MAT_DIALOG_DATA) public data: Product
   ) {}
 
   ngOnInit(): void {
     this.selection = this.api.selection;
     this.buildForm();
+  }
+  url: any; //Angular 11, for stricter type
+  msg = '';
+
+  //selectFile(event) { //Angular 8
+  selectFile(event: any) {
+    //Angular 11, for stricter type
+    this.file = event.target.files[0] as File;
+    if (!this.file) {
+      this.msg = 'You must select an image';
+      return;
+    }
+
+    var mimeType = this.file.type;
+    if (mimeType.match(/image\/*/) == null) {
+      this.msg = 'Only images are supported';
+      return;
+    }
+
+    var reader = new FileReader();
+    reader.readAsDataURL(this.file);
+
+    reader.onload = (_event: any) => {
+      this.msg = '';
+      this.url = reader.result;
+    };
   }
 
   onNoClick(): void {
@@ -44,15 +74,15 @@ export class DialogProductComponent implements OnInit {
     });
   }
 
-  get title() {
-    return this.data ? this.data.name : 'Create product';
-  }
-
   getDefault(key: keyof Product) {
     if (this.data) {
       return this.data[key];
     }
     return '';
+  }
+
+  get title() {
+    return this.data ? this.data.name : 'Create product';
   }
 
   get name() {
@@ -77,13 +107,27 @@ export class DialogProductComponent implements OnInit {
 
   handleSubmit() {
     this.dialogRef.close(true);
-    if (this.data) {
-      this.api
-        .updateProduct(this.data._id, this.productForm.value)
-        .subscribe(console.log);
-    } else {
-      this.api.createProduct(this.productForm.value).subscribe(console.log);
-    }
+    const formData = new FormData();
+    formData.append('file', this.file);
+    this.http
+      .post(environment.baseUrl + '/uploadphoto', formData)
+      .subscribe((res: any) => {
+        if (this.data) {
+          this.api
+            .updateProduct(this.data._id, {
+              ...this.productForm.value,
+              imageUrl: res.filename,
+            })
+            .subscribe();
+        } else {
+          this.api
+            .createProduct({
+              ...this.productForm.value,
+              imageUrl: res.filename,
+            })
+            .subscribe();
+        }
+      });
   }
 }
 

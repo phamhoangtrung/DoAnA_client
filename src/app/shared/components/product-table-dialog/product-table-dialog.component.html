@@ -1,0 +1,8 @@
+<ng-container *ngFor="let cart of data">
+  <h1>Cart Detail:</h1>
+  <app-product-table [productList]="cart.orderedProduct" [displayedColumns]="column"></app-product-table>
+</ng-container>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Export</button>
+</div>

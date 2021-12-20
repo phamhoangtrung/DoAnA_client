@@ -1,11 +1,34 @@
-<ng-container *ngIf="products?.length != 0">
+<ng-container *ngIf="products?.length != 0 else elseBlock">
   <div class="container">
+    <div class="row mb-3 card">
+      <div class="col-12 fncbtn">
+        <mat-form-field appearance="fill">
+          <mat-label>Enter a date range</mat-label>
+          <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+            <input matStartDate formControlName="start" placeholder="Start date">
+            <input matEndDate formControlName="end" placeholder="End date">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+
+          <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+          <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+        </mat-form-field>
+
+        <button mat-button (click)="export()">Export</button>
+      </div>
+    </div>
     <div class="row">
       <table mat-table [dataSource]="products" class="mat-elevation-z8">
 
         <ng-container matColumnDef="no">
           <th mat-header-cell *matHeaderCellDef>No.</th>
           <td mat-cell *matCellDef="let product">{{ product.index }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>Id.</th>
+          <td mat-cell *matCellDef="let product">{{ product._id }}</td>
         </ng-container>
 
         <ng-container matColumnDef="customerId">
@@ -33,14 +56,14 @@
         <ng-container matColumnDef="createdAt">
           <th mat-header-cell *matHeaderCellDef>Created At</th>
           <td mat-cell *matCellDef="let product">
-            {{ product.createdAt | date }}
+            {{ product.createdAt |  date:'h:mm a, M/d/yy' }}
           </td>
         </ng-container>
 
         <ng-container matColumnDef="updatedAt">
           <th mat-header-cell *matHeaderCellDef>Updated At</th>
           <td mat-cell *matCellDef="let product">
-            {{ product.updatedAt | date }}
+            {{ product.updatedAt |  date:'h:mm a, M/d/yy' }}
           </td>
         </ng-container>
 
@@ -48,6 +71,7 @@
           <th mat-header-cell *matHeaderCellDef>Action</th>
           <td mat-cell *matCellDef="let product">
             <mat-icon *ngIf="product.status !== 'accepted'" (click)="acceptCart(product._id)">done</mat-icon>
+            <mat-icon (click)="watchDetail(product._id)">search</mat-icon>
           </td>
         </ng-container>
 
@@ -59,10 +83,6 @@
 </ng-container>
 
 
-<div *ngIf="products?.length !== 0; else elseBlock">
-  <!-- <mat-paginator #paginator [length]="length" [pageSize]="10" (page)="onPageChange($event)" aria-label="Select page"> -->
-  <!-- </mat-paginator> -->
-</div>
 <ng-template #elseBlock>
   <div class="col-12">
     <h1 class="no-content">No item found.</h1>

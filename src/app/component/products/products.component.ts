@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { Router } from '@angular/router';
@@ -6,7 +6,6 @@ import { Observable, of } from 'rxjs';
 import {
   debounceTime,
   distinctUntilChanged,
-  mergeMap,
   startWith,
   switchMap,
   tap,
@@ -18,32 +17,40 @@ import { AuthService } from 'src/app/service/auth.service';
 import { CartService } from 'src/app/service/cart.service';
 import { DialogService } from 'src/app/service/dialog.service';
 import { IndicatorService } from 'src/app/service/indicator.service';
+import { Filter, Selection } from '../../models/share.model';
 
 @Component({
   selector: 'app-products',
   templateUrl: './products.component.html',
   styleUrls: ['./products.component.scss'],
 })
-export class ProductsComponent implements OnInit {
+export class ProductsComponent implements OnInit, OnDestroy {
   public productList!: Product[];
   public searchTerm = new FormControl('');
   public length!: number;
 
-  public isLoading!: Observable<boolean>;
-  @ViewChild('paginator', { static: true }) paginatorRef!:
-    | MatPaginator
-    | undefined;
-
-  displayedColumns: string[] = [
+  selection!: Selection;
+  selected = {
+    type: '',
+    gender: '',
+    sort: '',
+  };
+  column = [
     'no',
+    'img',
     'name',
     'rating',
     'price',
+    'type',
+    'gender',
     'sale',
     'createdAt',
     'updatedAt',
     'action',
   ];
+
+  public isLoading!: Observable<boolean>;
+  @ViewChild('paginator') paginatorRef!: MatPaginator;
 
   constructor(
     private api: ApiService,
@@ -54,7 +61,14 @@ export class ProductsComponent implements OnInit {
     private dialogService: DialogService
   ) {}
 
+  ngAfterViewInit() {
+    console.log(this.paginatorRef);
+  }
+
   ngOnInit(): void {
+    this.api.getSelection().subscribe((res) => {
+      this.selection = res;
+    });
     this.isLoading = this.indicatorService.get();
     this.searchTerm.valueChanges
       .pipe(
@@ -95,7 +109,7 @@ export class ProductsComponent implements OnInit {
         }
       });
     } else {
-      this.cartService.addToCart(item);
+      this.cartService.addToCart(item, 'add');
       this.dialogService.openSnackBar(
         `Item: '${item.name}' add to cart successfully`,
         'OK'
@@ -112,14 +126,13 @@ export class ProductsComponent implements OnInit {
     this.api.getProduct(page).subscribe((rs) => {
       this.indicatorService.set(false);
       this.productList = this.addIndex(rs.products);
+      window.scroll(0, 0);
     });
   }
 
   addIndex(item: any[]) {
     return item.map((it, i) => ({ ...it, index: i + 1 }));
   }
-
-  filter(filter: string) {}
 
   removeItem({ _id, name }: Product) {
     const data: DialogData = {
@@ -150,5 +163,38 @@ export class ProductsComponent implements OnInit {
         this.onPageChange(1);
       }
     });
+  }
+
+  handleStarChange(value: number, id: string) {
+    console.log(value, id);
+  }
+
+  handleSelectionChange(key: keyof Omit<Filter, 'name'>, value: string) {
+    this.selected[key] = value;
+    this.api.setFilter({ [key]: value });
+    this.startFilter();
+  }
+
+  startFilter() {
+    this.indicatorService.set(true);
+    this.api.getProduct().subscribe((res) => {
+      this.productList = this.addIndex(res.products);
+      this.length = res.total;
+      this.indicatorService.set(false);
+    });
+  }
+
+  resetFilter() {
+    this.selected = {
+      type: '',
+      sort: '',
+      gender: '',
+    };
+    this.api.resetFilter();
+    this.startFilter();
+  }
+
+  ngOnDestroy(): void {
+    this.api.resetFilter();
   }
 }

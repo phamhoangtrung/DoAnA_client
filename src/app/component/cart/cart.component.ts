@@ -70,4 +70,8 @@ export class CartComponent implements OnInit {
       (1 - product.sale / 100)
     ).toFixed(2);
   }
+
+  changeQuan(product: any, action: 'add' | 'rmv') {
+    this.cartService.addToCart(product, action);
+  }
 }

@@ -1,0 +1,69 @@
+<table [style]="{ width: '100%' }" mat-table [dataSource]="productList" class="mat-elevation-z8">
+  <ng-container matColumnDef="no">
+    <th mat-header-cell *matHeaderCellDef>No.</th>
+    <td mat-cell *matCellDef="let product">{{ product.index }}</td>
+  </ng-container>
+
+
+  <ng-container matColumnDef="img">
+    <th mat-header-cell *matHeaderCellDef>Img</th>
+    <td mat-cell *matCellDef="let product">
+      <img [src]="product.imageUrl" [width]="50" />
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef>Name</th>
+    <td mat-cell *matCellDef="let product">{{ product.name }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="rating">
+    <th mat-header-cell *matHeaderCellDef>Rating</th>
+    <td mat-cell *matCellDef="let product">{{ product.rating }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="type">
+    <th mat-header-cell *matHeaderCellDef>Type</th>
+    <td mat-cell *matCellDef="let product">{{ product.type }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="gender">
+    <th mat-header-cell *matHeaderCellDef>Gender</th>
+    <td mat-cell *matCellDef="let product">{{ product.gender }}</td>
+  </ng-container>
+
+  <ng-container matColumnDef="price">
+    <th mat-header-cell *matHeaderCellDef>Price</th>
+    <td mat-cell *matCellDef="let product">{{ product.price }}$</td>
+  </ng-container>
+
+  <ng-container matColumnDef="sale">
+    <th mat-header-cell *matHeaderCellDef>Sale</th>
+    <td mat-cell *matCellDef="let product">{{ product.sale }}%</td>
+  </ng-container>
+
+  <ng-container *ngIf="displayedColumns.includes('createdAt')" matColumnDef="createdAt">
+    <th mat-header-cell *matHeaderCellDef>Created At</th>
+    <td mat-cell *matCellDef="let product">
+      {{ product.createdAt |  date:'h:mm a, M/d/yy'}}
+    </td>
+  </ng-container>
+
+  <ng-container *ngIf="displayedColumns.includes('updatedAt')" matColumnDef="updatedAt">
+    <th mat-header-cell *matHeaderCellDef>Updated At</th>
+    <td mat-cell *matCellDef="let product">
+      {{ product.updatedAt |  date:'h:mm a, M/d/yy'}}
+    </td>
+  </ng-container>
+
+  <ng-container *ngIf="displayedColumns.includes('action')" matColumnDef="action">
+    <th mat-header-cell *matHeaderCellDef>Action</th>
+    <td mat-cell *matCellDef="let product">
+      <mat-icon (click)="removeProduct(product)">delete</mat-icon>
+      <mat-icon (click)="updateProduct(product)">update</mat-icon>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+</table>

@@ -14,22 +14,24 @@ interface ProductResponse {
 })
 export class ApiService {
   model = 'product';
-
+  selection!: Selection;
   filter: Filter = {
     name: '',
+    gender: '',
     sort: '',
+    type: '',
   };
 
-  selection!: Selection;
-
   constructor(private http: HttpClient) {
-    this.getSelection();
+    this.getSelection().subscribe((res) => {
+      this.selection = res;
+    });
   }
 
   getProduct(page: number = 1) {
-    const { name } = this.filter;
+    const { name, gender, type, sort } = this.filter;
     return this.http.get<ProductResponse>(
-      `${environment.baseUrl}/${this.model}?page=${page}&name=${name}`
+      `${environment.baseUrl}/${this.model}?page=${page}&name=${name}&gender=${gender}&type=${type}&sort=${sort}`
     );
   }
 
@@ -50,10 +52,17 @@ export class ApiService {
   }
 
   getSelection() {
-    return this.http
-      .get<Selection>(`${environment.baseUrl}/${this.model}/get-selection`)
-      .subscribe((res) => {
-        this.selection = res;
-      });
+    return this.http.get<Selection>(
+      `${environment.baseUrl}/${this.model}/get-selection`
+    );
+  }
+
+  resetFilter() {
+    this.filter = {
+      name: '',
+      gender: '',
+      sort: '',
+      type: '',
+    };
   }
 }

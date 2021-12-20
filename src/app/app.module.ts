@@ -23,6 +23,9 @@ import { JwtInterceptor } from './service/jwt.interceptor';
 import { CartAdminComponent } from './component/cart-admin/cart-admin.component';
 import { CartListComponent } from './component/cart-list/cart-list.component';
 import { UserDetailComponent } from './component/user-detail/user-detail.component';
+import { StaringComponent } from './shared/components/staring/staring.component';
+import { ProductTableComponent } from './shared/components/product-table/product-table.component';
+import { ProductTableDialogComponent } from './shared/components/product-table-dialog/product-table-dialog.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +44,9 @@ import { UserDetailComponent } from './component/user-detail/user-detail.compone
     UserAdminComponent,
     CartListComponent,
     UserDetailComponent,
+    StaringComponent,
+    ProductTableComponent,
+    ProductTableDialogComponent,
   ],
   imports: [
     BrowserModule,

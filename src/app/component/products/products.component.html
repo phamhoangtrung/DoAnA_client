@@ -1,33 +1,101 @@
-<div class="container">
-  <div class="row">
+<div class="container mb-5">
+  <div class="row card">
     <div class="col-md-12">
-      <div class="form-group">
-        <div class="input">
-          <input type="text" class="form-control" [formControl]="searchTerm" placeholder="search products" />
-          <mat-icon class="icon" aria-hidden="false" aria-label="Example home icon">search</mat-icon>
+      <div class="form-group mb-1">
+        <div class="chips">
+          <mat-label>Type:</mat-label>
+          <mat-chip-list *ngIf="selection" aria-label="Type selection">
+            <mat-chip color="primary" (click)="handleSelectionChange('type','')" [selected]="selected.type===''">all
+            </mat-chip>
+            <mat-chip (click)="handleSelectionChange('type' ,type)" *ngFor="let type of selection.type"
+              [selected]="selected.type===type">{{type}}</mat-chip>
+          </mat-chip-list>
         </div>
-        <ng-container *ngIf="authService.isAdmin">
-          <button mat-flat-button (click)="createProduct()">
-            <mat-icon>add</mat-icon>
+      </div>
+      <div class="form-group mb-1">
+        <div class="chips">
+          <mat-label>Gender:</mat-label>
+          <mat-chip-list *ngIf="selection" aria-label="Type selection">
+            <mat-chip (click)="handleSelectionChange('gender','')" [selected]="selected.gender===''">all</mat-chip>
+            <mat-chip (click)="handleSelectionChange('gender',gender)" *ngFor="let gender of selection.gender"
+              [selected]="selected.gender===gender">{{gender}}
+            </mat-chip>
+          </mat-chip-list>
+        </div>
+      </div>
+
+      <div class="form-group mb-3">
+        <div class="chips">
+          <mat-label>Price:</mat-label>
+          <mat-chip-list aria-label="Type selection">
+            <mat-chip (click)="handleSelectionChange('sort','')" [selected]="selected.sort===''">none</mat-chip>
+            <mat-chip (click)="handleSelectionChange('sort','price')" [selected]="selected.sort==='price'">low to high
+            </mat-chip>
+            <mat-chip (click)="handleSelectionChange('sort','-price')" [selected]="selected.sort==='-price'">high to
+              low
+            </mat-chip>
+          </mat-chip-list>
+        </div>
+
+        <div class="functbn">
+
+          <button color="primary" mat-raised-button (click)="resetFilter()">Reset Filter</button>
+          <!-- <button color="primary" mat-raised-button (click)="startFilter()">Confirm</button> -->
+          <ng-container *ngIf="authService.isAdmin">
+            <button color="primary" mat-raised-button (click)="createProduct()">
+              <mat-icon>add</mat-icon>
+            </button>
+          </ng-container>
+        </div>
+
+      </div>
+      <div class="form-group">
+        <mat-form-field class="input" appearance="fill">
+          <mat-label>Search</mat-label>
+          <input matInput [formControl]="searchTerm" />
+          <button *ngIf="searchTerm.value" matSuffix mat-icon-button aria-label="Clear"
+            (click)="searchTerm.setValue('')">
+            <mat-icon>close</mat-icon>
           </button>
-        </ng-container>
+
+          <button disableRipple matSuffix mat-icon-button aria-label="Clear">
+            <mat-icon aria-hidden="false" aria-label="Example home icon">search</mat-icon>
+          </button>
+        </mat-form-field>
+
       </div>
     </div>
   </div>
   <div class="row">
     <ng-container *ngIf="!authService.isAdmin">
       <ng-container *ngFor="let item of productList">
-        <div class="col-xl-3 col-sm-6">
+        <div class=" col-md-4 col-l-4 col-sm-6">
           <div class="card">
-            <app-badge [isHidden]="item.sale === 0" [content]="item.sale + '%'"></app-badge>
-            <h5 class="field"> {{ item.name }} </h5>
-            <p class="field"> {{ item.rating }} </p>
-            <p class="field"> {{ item.gender }} </p>
-            <p class="field"> {{ item.type }} </p>
-            <p><strong>Price:</strong> {{ item.price }}$</p>
-            <button class="btn btn-primary" (click)="addToCart(item)">
-              Add to cart
-            </button>
+            <h5 class="field title"><span>{{ item.name }}</span> </h5>
+            <img [src]="item.imageUrl" [height]="200" class="item-image" />
+            <app-staring [selectedRating]="item.rating" [disabled]="true"
+              (onStartChange)="handleStarChange($event,item._id)">
+            </app-staring>
+            <p class="text-center"><strong>Price:</strong> {{ item.price }}$</p>
+            <div class="prcsec">
+              <mat-chip-list aria-label="Fish selection">
+                <mat-chip color="primary" selected>{{ item.gender }}</mat-chip>
+                <mat-chip color="accent" selected> {{ item.type }}</mat-chip>
+                <mat-chip [hidden]="item.sale === 0" color="warn" selected>{{ item.sale + "%" }}</mat-chip>
+
+              </mat-chip-list>
+              <!-- <app-badge [isHidden]="item.sale === 0" [content]="item.sale + '%'"></app-badge> -->
+            </div>
+
+            <div class="fbtn">
+              <button mat-raised-button color="primary" (click)="addToCart(item)">
+                Add To Cart
+              </button>
+
+              <button mat-raised-button color="primary" (click)="addToCart(item)">
+                View Product
+              </button>
+            </div>
           </div>
         </div>
       </ng-container>
@@ -35,64 +103,16 @@
 
     <ng-container *ngIf="authService.isAdmin">
       <div class="col-12 pt-3">
-        <table [style]="{ width: '100%' }" mat-table [dataSource]="productList" class="mat-elevation-z8">
-          <ng-container matColumnDef="no">
-            <th mat-header-cell *matHeaderCellDef>No.</th>
-            <td mat-cell *matCellDef="let product">{{ product.index }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef>Name</th>
-            <td mat-cell *matCellDef="let product">{{ product.name }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="rating">
-            <th mat-header-cell *matHeaderCellDef>Rating</th>
-            <td mat-cell *matCellDef="let product">{{ product.rating }}</td>
-          </ng-container>
-
-          <ng-container matColumnDef="price">
-            <th mat-header-cell *matHeaderCellDef>Price</th>
-            <td mat-cell *matCellDef="let product">{{ product.price }}$</td>
-          </ng-container>
-
-          <ng-container matColumnDef="sale">
-            <th mat-header-cell *matHeaderCellDef>Sale</th>
-            <td mat-cell *matCellDef="let product">{{ product.sale }}%</td>
-          </ng-container>
-
-          <ng-container matColumnDef="createdAt">
-            <th mat-header-cell *matHeaderCellDef>Created At</th>
-            <td mat-cell *matCellDef="let product">
-              {{ product.createdAt | date }}
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="updatedAt">
-            <th mat-header-cell *matHeaderCellDef>Updated At</th>
-            <td mat-cell *matCellDef="let product">
-              {{ product.updatedAt | date }}
-            </td>
-          </ng-container>
-
-          <ng-container matColumnDef="action">
-            <th mat-header-cell *matHeaderCellDef>Action</th>
-            <td mat-cell *matCellDef="let product">
-              <mat-icon (click)="removeItem(product)">delete</mat-icon>
-              <mat-icon (click)="updateProduct(product)">update</mat-icon>
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-        </table>
+        <app-product-table [displayedColumns]="column" [productList]="productList" (remove)="removeItem($event)"
+          (update)="updateProduct($event)">
+        </app-product-table>
       </div>
     </ng-container>
   </div>
 </div>
 
-<div *ngIf="productList?.length !== 0; else elseBlock">
-  <mat-paginator #paginator [length]="length" [pageSize]="10" (page)="onPageChange($event)" aria-label="Select page">
+<div class="footer" *ngIf="productList?.length !== 0; else elseBlock">
+  <mat-paginator #paginator [length]="length" [pageSize]="12" (page)="onPageChange($event)" aria-label="Select page">
   </mat-paginator>
 </div>
 <ng-template #elseBlock>

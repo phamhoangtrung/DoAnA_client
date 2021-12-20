@@ -108,3 +108,15 @@ table {
     }
   }
 }
+
+.quan {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  mat-icon {
+    font-size: 1em;
+    width: auto;
+    height: auto;
+    padding: 0 0.5em;
+  }
+}

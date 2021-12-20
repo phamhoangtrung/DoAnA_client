@@ -6,31 +6,33 @@ $theme-colors: (
 
 html,
 body {
-  height: 100%;
+  min-height: 100vh;
 }
 body {
   margin: 0;
 
-  background: linear-gradient(
-      to right top,
-      #d16ba5,
-      #c777b9,
-      #ba83ca,
-      #aa8fd8,
-      #9a9ae1,
-      #8aa7ec,
-      #79b3f4,
-      #69bff8,
-      #52cffe,
-      #41dfff,
-      #46eefa,
-      #5ffbf1
-    )
-    fixed;
+  // background: linear-gradient(
+  //     to right top,
+  //     #d16ba5,
+  //     #c777b9,
+  //     #ba83ca,
+  //     #aa8fd8,
+  //     #9a9ae1,
+  //     #8aa7ec,
+  //     #79b3f4,
+  //     #69bff8,
+  //     #52cffe,
+  //     #41dfff,
+  //     #46eefa,
+  //     #5ffbf1
+  //   )
+  //   fixed;
 
-  // background-image: url("./assets/bg.jfif");
-  // backdrop-filter: blur(15px);
-  // background-attachment: fixed;
+  background-image: url("./assets/bg.jfif");
+  backdrop-filter: blur(5px);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 100%;
   overflow: overlay;
 }
 
@@ -172,7 +174,6 @@ body {
     }
   }
   button {
-    margin-top: 50px;
     width: 100%;
     box-shadow: 0 0 20px rgba(8, 7, 16, 0.3);
     padding: 15px 0;
@@ -218,4 +219,17 @@ table {
   td {
     text-align: center !important;
   }
+}
+
+.card {
+  border-radius: 15px;
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+.mat-snack-bar-container {
+  position: fixed;
+  z-index: 10;
+  top: 0;
+  right: 0;
 }

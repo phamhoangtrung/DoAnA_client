@@ -1,6 +1,6 @@
 <h1 mat-dialog-title>{{ title }}</h1>
 <div mat-dialog-content>
-  <form [formGroup]="productForm">
+  <form autocomplete="off" [formGroup]="productForm">
     <mat-form-field class="example-full-width" appearance="fill">
       <mat-label>Product name</mat-label>
       <input matInput formControlName="name" />
@@ -68,16 +68,24 @@
       </mat-form-field>
 
       <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Favorite food</mat-label>
+        <mat-label>Created At</mat-label>
         <input matInput [value]="data.createdAt" disabled />
       </mat-form-field>
 
+
       <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Favorite food</mat-label>
+        <mat-label>Updated At</mat-label>
         <input matInput [value]="data.updatedAt" disabled />
       </mat-form-field>
     </ng-container>
   </form>
+  <div style="text-align:center">
+    <div [innerHtml]='msg' *ngIf="msg" style="color: red;"></div>
+    <div><img width="100%" [src]="url" *ngIf="url"></div>
+    <p>
+      <input type="file" (change)="selectFile($event)">
+    </p>
+  </div>
 </div>
 
 <div mat-dialog-actions>

@@ -41,12 +41,14 @@ export class CartService {
     this.productList.next(product);
   }
 
-  addToCart(product: any) {
+  addToCart(product: any, action?: 'add' | 'rmv') {
     const addedProduct = this.cartItemList.find((i) => i._id === product._id);
     let newList;
     if (addedProduct) {
       newList = this.cartItemList.map((item) => {
-        if (item._id === product._id) item.quantity++;
+        if (item._id === product._id)
+          item.quantity =
+            action === 'add' ? item.quantity + 1 : item.quantity - 1;
         return item;
       });
     } else {
@@ -95,8 +97,8 @@ export class CartService {
     return this.http.post(`${environment.baseUrl}/${this.model}`, cart);
   }
 
-  getAllCart() {
-    return this.http.get(`${environment.baseUrl}/${this.model}`);
+  getAllCart(date = '') {
+    return this.http.get(`${environment.baseUrl}/${this.model}?date=${date}`);
   }
 
   acceptCart(cartId: string) {

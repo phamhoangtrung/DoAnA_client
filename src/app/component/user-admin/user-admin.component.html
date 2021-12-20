@@ -2,10 +2,9 @@
   <div class="container">
     <div class="row">
       <table mat-table [dataSource]="users" class="mat-elevation-z8">
-
-        <ng-container matColumnDef="id">
-          <th mat-header-cell *matHeaderCellDef>ID.</th>
-          <td mat-cell *matCellDef="let user">{{ user._id }}</td>
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>Email</th>
+          <td mat-cell *matCellDef="let user"> <span [matTooltip]="user._id"> {{ user.email }}</span> </td>
         </ng-container>
 
         <ng-container matColumnDef="role">
@@ -27,12 +26,6 @@
           <th mat-header-cell *matHeaderCellDef>Name</th>
           <td mat-cell *matCellDef="let user">{{user.name}} </td>
         </ng-container>
-
-        <ng-container matColumnDef="email">
-          <th mat-header-cell *matHeaderCellDef>Email</th>
-          <td mat-cell *matCellDef="let user"> {{ user.email }} </td>
-        </ng-container>
-
 
         <ng-container matColumnDef="phone">
           <th mat-header-cell *matHeaderCellDef>Phone Num.</th>

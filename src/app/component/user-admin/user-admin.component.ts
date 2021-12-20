@@ -13,13 +13,12 @@ export class UserAdminComponent implements OnInit {
   public users!: User[];
 
   displayedColumns: string[] = [
-    'id',
+    'email',
+    'name',
     'role',
+    'phone',
     'totalBuy',
     'memberShip',
-    'name',
-    'email',
-    'phone',
     'action',
   ];
 
