@@ -1,0 +1,62 @@
+<div class="container card">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="product-image">
+        <img [src]="product?.imageUrl" alt="" class="img-fluid">
+      </div>
+    </div>
+    <div class="col-md-6">
+      <h2 class="text-bold text-strong">{{product?.name}}</h2>
+      <span class="seller-name-codeblocks">
+        <!-- <h5>by <a href="#">Codeblocks</a></h5> -->
+
+      </span>
+
+
+      <span>
+        <h1>
+          <span [ngClass]="product.sale>0 ? 'sale':'' ">
+            ${{product.price}}
+          </span>
+          <span *ngIf="product.sale>0">
+            ${{product.price * (100-product.sale)/100}}
+          </span>
+          <span class="currency-codeblocks">
+            <small>USD</small>
+          </span>
+        </h1>
+      </span>
+      <div class="star">
+        <app-staring [selectedRating]="product.rating" [disabled]="true">
+        </app-staring>
+      </div>
+      <!-- <span class="description-codeblocks">
+        <p>
+          <strong>Description:</strong> <br>
+          <span class="text-muted">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Blanditiis, voluptas ratione! Numquam corrupti
+            atque
+            amet accusantium, perspiciatis totam alias qui ea cum tempora et sit ex nihil doloremque recusandae
+            nesciunt.
+          </span>
+        </p>
+      </span> -->
+
+      <span>
+        <mat-chip-list aria-label="Fish selection">
+          <mat-chip color="primary" selected>{{ product?.gender }}</mat-chip>
+          <mat-chip color="accent" selected> {{ product?.type }}</mat-chip>
+          <mat-chip [hidden]="product?.sale === 0" color="warn" selected>{{ product?.sale + "%" }}</mat-chip>
+        </mat-chip-list>
+      </span>
+      <div class="functbtn">
+
+        <span class="buy-form-codeblock">
+          <button type="button" class="btn btn-primary" (click)="addToCart()">Add To Cart</button>
+        </span>
+        <span class="buy-form-codeblock">
+          <button routerLink="/products" type="button" class="btn btn-primary">Back To Shop</button>
+        </span>
+      </div>
+    </div>
+  </div>

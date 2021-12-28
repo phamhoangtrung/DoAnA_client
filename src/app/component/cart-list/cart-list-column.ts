@@ -5,6 +5,11 @@ const columns = [
     cell: (element: any) => `${element.index}`,
   },
   {
+    columnDef: 'img',
+    header: 'Img.',
+    cell: (element: any) => `${element.imageUrl}`,
+  },
+  {
     columnDef: 'name',
     header: 'Name',
     cell: (element: any) => `${element.name}`,

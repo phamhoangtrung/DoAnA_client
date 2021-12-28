@@ -1,4 +1,4 @@
-<div class="container">
+<!-- <div class="container">
   <div class="row justify-content-md-center">
     <mat-card class="example-card">
       <mat-card-title-group>
@@ -10,7 +10,6 @@
 
 
         <mat-card-subtitle>Email: {{user?.email}}</mat-card-subtitle>
-        <!-- <img mat-card-xl-image src="https://materal.angular.io/assets/img/examples/shiba2.jpg"> -->
       </mat-card-title-group>
       <mat-card-content>
         <p><strong>Age:</strong> {{user?.age}}</p>
@@ -23,4 +22,30 @@
       </mat-card-content>
     </mat-card>
   </div>
+</div> -->
+<div class="card mt-5">
+  <main class="card__user">
+    <img
+      src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80"
+      alt="" class="card__user-image">
+    <div class="card__user-info">
+      <h2 *ngIf="!isEdit" class="card__user-info__name">{{name}}</h2>
+      <input class="card__user-info__input" *ngIf="isEdit" [(ngModel)]="name" />
+      <p class="card__user-info__stats">{{user?.email}} ({{user?.age}})</p>
+      <p class="chips">
+        <mat-chip-list aria-label="Fish selection">
+          <mat-chip color="accent" selected>Spend: {{totalBuy}}$ </mat-chip>
+          <mat-chip color="primary" selected>Lv: {{user?.memberShip}}</mat-chip>
+        </mat-chip-list>
+      </p>
+      <p class="card__user-info__desc">Address: {{user?.address}}</p>
+    </div>
+    <div class="card__user-actions">
+      <button class="card__user-actions-follow" *ngIf="isEdit" (click)="update()">Update</button>
+      <button class="card__user-actions-follow" *ngIf="!isEdit" routerLink="/products">Home</button>
+      <button class="card__user-actions-message" (click)="edit()">{{isEdit?'Cancel':"Edit"}}</button>
+
+      <!-- <button class="card__user-actions-message">Message</button> -->
+    </div>
+  </main>
 </div>

@@ -10,26 +10,8 @@ body {
 }
 body {
   margin: 0;
-
-  // background: linear-gradient(
-  //     to right top,
-  //     #d16ba5,
-  //     #c777b9,
-  //     #ba83ca,
-  //     #aa8fd8,
-  //     #9a9ae1,
-  //     #8aa7ec,
-  //     #79b3f4,
-  //     #69bff8,
-  //     #52cffe,
-  //     #41dfff,
-  //     #46eefa,
-  //     #5ffbf1
-  //   )
-  //   fixed;
-
   background-image: url("./assets/bg.jfif");
-  backdrop-filter: blur(5px);
+  backdrop-filter: blur(20px);
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: 100% 100%;
@@ -225,11 +207,4 @@ table {
   border-radius: 15px;
   padding-top: 1em;
   padding-bottom: 1em;
-}
-
-.mat-snack-bar-container {
-  position: fixed;
-  z-index: 10;
-  top: 0;
-  right: 0;
 }

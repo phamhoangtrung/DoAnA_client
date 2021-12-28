@@ -1,3 +1,4 @@
+import { StringMap } from '@angular/compiler/src/compiler_facade_interface';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { User } from 'src/app/models/user.model';
@@ -18,6 +19,7 @@ export class UserDetailComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = this.authService.user;
+    this.name = this.user?.name || '';
   }
 
   edit() {
@@ -26,8 +28,12 @@ export class UserDetailComponent implements OnInit {
   update() {
     this.authService.changeName(this.name).subscribe((res) => {
       this.user = res.customer;
-      this.name = '';
+      this.name = res.customer.name;
       this.isEdit = false;
     });
+  }
+
+  get totalBuy() {
+    return this.user?.totalBuy.toFixed(2);
   }
 }

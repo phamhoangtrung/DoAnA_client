@@ -1,7 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { iif, of } from 'rxjs';
+import { switchMap, tap } from 'rxjs/operators';
+import { DialogData } from 'src/app/models/dialog.model';
 import { CartProduct, Product } from 'src/app/models/product.model';
 import { AuthService } from 'src/app/service/auth.service';
 import { CartService } from 'src/app/service/cart.service';
+import { DialogService } from 'src/app/service/dialog.service';
+import { IndicatorService } from 'src/app/service/indicator.service';
+import { IndicatorComponent } from 'src/app/shared/components/indicator/indicator.component';
 
 @Component({
   selector: 'app-cart',
@@ -16,6 +22,7 @@ export class CartComponent implements OnInit {
 
   displayedColumns: string[] = [
     'no',
+    'img',
     'name',
     'quantity',
     'price',
@@ -24,15 +31,11 @@ export class CartComponent implements OnInit {
     'action',
   ];
 
-  // name: string;
-  // price: number;
-  // rating: number;
-  // sale: number;
-  // type: 'men' | 'women';
-
   constructor(
     private cartService: CartService,
-    private authService: AuthService
+    private authService: AuthService,
+    private dialogService: DialogService,
+    private indicatorService: IndicatorService
   ) {}
 
   ngOnInit(): void {
@@ -51,16 +54,55 @@ export class CartComponent implements OnInit {
   }
 
   removeItem(item: any) {
-    this.cartService.removeCartItem(item);
+    const data: DialogData = {
+      title: 'Delete',
+      body: `Do you want to remove item: ${item.name}`,
+      type: 'option',
+    };
+    this.dialogService.openMessageDialog(data).subscribe((rs: boolean) => {
+      if (rs) {
+        this.cartService.removeCartItem(item);
+      }
+    });
   }
+
   emptyCart() {
-    this.cartService.removeAllCart();
+    const data: DialogData = {
+      title: 'Delete',
+      body: `Do you want to remove all items`,
+      type: 'option',
+    };
+    this.dialogService.openMessageDialog(data).subscribe((rs: boolean) => {
+      if (rs) {
+        this.cartService.removeAllCart();
+      }
+    });
   }
 
   createCart() {
-    this.cartService.createCart().subscribe(() => {
-      this.emptyCart();
-    });
+    const data: DialogData = {
+      title: 'Check out',
+      body: `Do you want to checkout this cart`,
+      type: 'option',
+    };
+    this.dialogService
+      .openMessageDialog(data)
+      .pipe(
+        switchMap((isAccept: any) => {
+          if (isAccept) {
+            this.indicatorService.set(true);
+            return this.cartService.createCart().pipe(
+              tap(() => {
+                this.cartService.removeAllCart();
+              })
+            );
+          }
+          return of(null);
+        })
+      )
+      .subscribe(() => {
+        this.indicatorService.set(false);
+      });
   }
 
   getSaleTotal(product: any) {
@@ -71,7 +113,12 @@ export class CartComponent implements OnInit {
     ).toFixed(2);
   }
 
-  changeQuan(product: any, action: 'add' | 'rmv') {
+  changeQuantity(product: any, action: 'add' | 'rmv') {
+    if (product.quantity <= 1 && action === 'rmv') return;
     this.cartService.addToCart(product, action);
+  }
+
+  onStartChange(product: CartProduct, rating: number) {
+    this.cartService.changeRating(product, rating);
   }
 }

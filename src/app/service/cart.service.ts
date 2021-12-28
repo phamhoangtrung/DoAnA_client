@@ -52,12 +52,24 @@ export class CartService {
         return item;
       });
     } else {
-      newList = [...this.cartItemList, { ...product, quantity: 1 }];
+      newList = [...this.cartItemList, { ...product, quantity: 1, rating: 3 }];
     }
     this.cartItemList = newList;
     this.setLocalData(newList);
     this.productList.next(this.cartItemList);
     this.getTotalPrice();
+  }
+
+  changeRating(product: CartProduct, rating: number) {
+    const newList = this.cartItemList.map((p) => {
+      if (p._id === product._id) {
+        p = { ...p, rating };
+      }
+      return p;
+    });
+    this.cartItemList = newList;
+    this.setLocalData(newList);
+    this.productList.next(this.cartItemList);
   }
 
   getTotalPrice(): number {

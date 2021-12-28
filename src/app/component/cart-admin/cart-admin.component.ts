@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { CartAdmin, CartProduct } from 'src/app/models/product.model';
 import { CartService } from 'src/app/service/cart.service';
@@ -33,7 +34,6 @@ export class CartAdminComponent implements OnInit {
     'updatedAt',
     'action',
   ];
-
   constructor(
     private cartService: CartService,
     private indicatorService: IndicatorService,
@@ -42,11 +42,11 @@ export class CartAdminComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.indicatorService.set(true);
     this.getCart();
   }
 
   getCart() {
+    this.indicatorService.set(true);
     this.cartService
       .getAllCart()
       .pipe(
@@ -69,7 +69,6 @@ export class CartAdminComponent implements OnInit {
   acceptCart(cartId: string) {
     this.indicatorService.set(true);
     this.cartService.acceptCart(cartId).subscribe(() => {
-      this.indicatorService.set(false);
       this.getCart();
     });
   }
@@ -80,20 +79,22 @@ export class CartAdminComponent implements OnInit {
     // console.log(date);
 
     this.cartService.getAllCart(date).subscribe((res: any) => {
-      this.dialogService.openProductTableDialog(res.carts).subscribe((rs) => {
-        if (rs) {
-          const startDate = new Date(this.range.value.start).toLocaleDateString(
-            'en-US'
-          );
-          const endDate = new Date(this.range.value.end).toLocaleDateString(
-            'en-US'
-          );
-          this.exportService.exportExcel(
-            res.carts,
-            `Cart-${startDate}-to-${endDate}`
-          );
-        }
-      });
+      this.dialogService
+        .openProductTableDialog(res.carts, true)
+        .subscribe((rs) => {
+          if (rs) {
+            const startDate = new Date(
+              this.range.value.start
+            ).toLocaleDateString('en-US');
+            const endDate = new Date(this.range.value.end).toLocaleDateString(
+              'en-US'
+            );
+            this.exportService.exportExcel(
+              res.carts,
+              `Cart-${startDate}-to-${endDate}`
+            );
+          }
+        });
     });
   }
 

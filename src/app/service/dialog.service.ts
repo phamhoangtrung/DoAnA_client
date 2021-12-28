@@ -5,17 +5,16 @@ import { DialogComponent } from '../shared/components/dialog/dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DialogProductComponent } from '../shared/components/dialog-product/dialog-product.component';
 import { CartAdmin, Product } from '../models/product.model';
-import { Direction } from '@angular/cdk/bidi';
 import { ProductTableDialogComponent } from '../shared/components/product-table-dialog/product-table-dialog.component';
+import { SnackBarComponent } from '../shared/components/snack-bar/snack-bar.component';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DialogService {
   constructor(public dialog: MatDialog, private _snackBar: MatSnackBar) {}
-  openMessageDialog(data: DialogData) {
-    console.log(window.scrollY);
 
+  openMessageDialog(data: DialogData) {
     return this.dialog
       .open(DialogComponent, {
         width: '300px',
@@ -27,11 +26,10 @@ export class DialogService {
       .afterClosed();
   }
 
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action, {
+  openSnackBar(message: string) {
+    this._snackBar.openFromComponent(SnackBarComponent, {
       duration: 1000,
-      horizontalPosition: 'right',
-      verticalPosition: 'top',
+      data: { message },
     });
   }
 
@@ -47,13 +45,13 @@ export class DialogService {
       .afterClosed();
   }
 
-  openProductTableDialog(data?: CartAdmin[]) {
+  openProductTableDialog(data?: CartAdmin[], isExport = false) {
     return this.dialog
       .open(ProductTableDialogComponent, {
         width: '1000px',
         // maxHeight: '80%',
         height: '80%',
-        data,
+        data: { carts: data, isExport },
         position: {
           top: window.scrollY + 50 + 'px',
         },

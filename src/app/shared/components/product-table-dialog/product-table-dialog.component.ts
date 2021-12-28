@@ -10,9 +10,10 @@ import { CartAdmin, Product } from 'src/app/models/product.model';
 export class ProductTableDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ProductTableDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: CartAdmin[]
+    @Inject(MAT_DIALOG_DATA)
+    public data: { isExport: boolean; carts: CartAdmin[] }
   ) {
-    this.data = this.data.map((d) => {
+    this.data.carts = this.data.carts.map((d) => {
       const orderedProduct = d.orderedProduct.map((p, i) => ({
         ...p,
         index: i + 1,

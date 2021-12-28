@@ -1,45 +1,44 @@
-.card-top {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  word-wrap: break-word;
-  background: #fff;
-  background-clip: border-box;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 0.25rem;
-}
-
-.item img {
-  width: 64px;
-}
-
 .item {
   margin: 0px 15px;
   text-align: center;
-}
-
-.item a:hover {
-  color: blue;
+  img {
+    width: 64px;
+  }
+  a:hover {
+    color: blue;
+  }
+  &-image {
+    object-fit: cover;
+    &:hover {
+      transform: scale(1) !important;
+    }
+  }
 }
 
 .card {
+  &-top {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 0.25rem;
+  }
   max-width: 100%;
   padding: 10px;
   margin: 20px;
   border-radius: 5px;
-}
-
-.card img {
-  // width: 200px;
-  // height: 200px;
-  margin-bottom: 15px;
-  transition: 0.3s ease-in-out;
-}
-
-.card img:hover {
-  transition: 0.3s ease-in-out;
-  transform: scale(1.1);
+  img {
+    margin-bottom: 15px;
+    transition: 0.3s ease-in-out;
+    &:hover {
+      transition: 0.3s ease-in-out;
+      transform: scale(1.1);
+    }
+  }
 }
 
 .form-control {
@@ -113,13 +112,6 @@ table {
   display: flex;
   justify-content: center;
   margin-bottom: 1em;
-}
-
-.item-image {
-  object-fit: cover;
-  &:hover {
-    transform: scale(1) !important;
-  }
 }
 
 .chips {

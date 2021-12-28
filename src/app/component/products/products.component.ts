@@ -61,10 +61,6 @@ export class ProductsComponent implements OnInit, OnDestroy {
     private dialogService: DialogService
   ) {}
 
-  ngAfterViewInit() {
-    console.log(this.paginatorRef);
-  }
-
   ngOnInit(): void {
     this.api.getSelection().subscribe((res) => {
       this.selection = res;
@@ -111,8 +107,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
     } else {
       this.cartService.addToCart(item, 'add');
       this.dialogService.openSnackBar(
-        `Item: '${item.name}' add to cart successfully`,
-        'OK'
+        `Item: '${item.name}' add to cart successfully`
       );
     }
   }
@@ -126,6 +121,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
     this.api.getProduct(page).subscribe((rs) => {
       this.indicatorService.set(false);
       this.productList = this.addIndex(rs.products);
+      this.length = rs.total;
       window.scroll(0, 0);
     });
   }

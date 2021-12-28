@@ -26,6 +26,8 @@ import { UserDetailComponent } from './component/user-detail/user-detail.compone
 import { StaringComponent } from './shared/components/staring/staring.component';
 import { ProductTableComponent } from './shared/components/product-table/product-table.component';
 import { ProductTableDialogComponent } from './shared/components/product-table-dialog/product-table-dialog.component';
+import { SnackBarComponent } from './shared/components/snack-bar/snack-bar.component';
+import { ProductDetailComponent } from './component/product-detail/product-detail.component';
 
 @NgModule({
   declarations: [
@@ -47,6 +49,8 @@ import { ProductTableDialogComponent } from './shared/components/product-table-d
     StaringComponent,
     ProductTableComponent,
     ProductTableDialogComponent,
+    SnackBarComponent,
+    ProductDetailComponent,
   ],
   imports: [
     BrowserModule,

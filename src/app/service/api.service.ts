@@ -65,4 +65,8 @@ export class ApiService {
       type: '',
     };
   }
+
+  getDetail(id: string) {
+    return this.http.get(`${environment.baseUrl}/${this.model}/${id}`);
+  }
 }

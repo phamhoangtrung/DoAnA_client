@@ -11,7 +11,7 @@ export interface Product {
   _id: string;
 }
 
-export type CartProduct = Product & { quantity: number };
+export type CartProduct = Product & { quantity: number; rating: number };
 
 export interface CartAdmin {
   _id: string;
