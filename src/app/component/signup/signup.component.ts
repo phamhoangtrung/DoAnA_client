@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import {
-  FormGroup,
-  FormBuilder,
-  Validators,
-  FormControl,
   AbstractControl,
+  FormBuilder,
+  FormGroup,
   ValidationErrors,
+  Validators,
 } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { map, retry } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { UserSignup } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/service/auth.service';
 import { passwordsMatchValidator } from 'src/app/shared/validator/mismatch.validator';

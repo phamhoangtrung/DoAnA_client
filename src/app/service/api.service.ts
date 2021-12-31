@@ -53,7 +53,7 @@ export class ApiService {
 
   getSelection() {
     return this.http.get<Selection>(
-      `${environment.baseUrl}/${this.model}/get-selection`
+      `${environment.baseUrl}/${this.model}/selection`
     );
   }
 
@@ -68,5 +68,12 @@ export class ApiService {
 
   getDetail(id: string) {
     return this.http.get(`${environment.baseUrl}/${this.model}/${id}`);
+  }
+
+  sendRating(product: any, _id: string) {
+    return this.http.patch(`${environment.baseUrl}/${this.model}/rating`, {
+      product,
+      _id,
+    });
   }
 }

@@ -6,6 +6,7 @@ export interface Product {
   sale: number;
   type: string;
   gender: string;
+  totalSell: number;
   createdAt: string;
   updatedAt: string;
   _id: string;
@@ -19,6 +20,8 @@ export interface CartAdmin {
   status: string;
   total: number;
   totalProduct: number;
+  isRated: boolean;
+  customerEmail: string;
   createdAt: string;
   updatedAt: string;
   orderedProduct: Product[];

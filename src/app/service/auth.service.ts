@@ -1,9 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { map, tap } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { DialogData } from '../models/dialog.model';
 import { UserSignin, UserSignup, User } from '../models/user.model';
+import { DialogService } from './dialog.service';
 import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
@@ -16,7 +19,8 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private ls: LocalStorageService,
-    private router: Router
+    private router: Router,
+    private dialogService: DialogService
   ) {
     const localData = this.getUser();
     if (localData != null) {
@@ -83,10 +87,20 @@ export class AuthService {
           token: res.token,
         }))
       )
-      .subscribe((res: User) => {
-        this.setUser(res);
-        this.user = res;
-        this.router.navigate(['/']);
+      .subscribe({
+        next: (res: User) => {
+          this.setUser(res);
+          this.user = res;
+          this.router.navigate(['/']);
+        },
+        error: (err) => {
+          const dialogData: DialogData = {
+            title: 'Error Notification',
+            body: err.error.msg,
+            type: 'confirm',
+          };
+          this.dialogService.openMessageDialog(dialogData);
+        },
       });
   }
 

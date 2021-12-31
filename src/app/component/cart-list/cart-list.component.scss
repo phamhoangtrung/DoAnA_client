@@ -1,3 +1,31 @@
 .demo-table {
   width: 100%;
 }
+
+tr {
+  padding-top: 1em;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+
+  span {
+    margin-right: 1em;
+    font-size: 1.1em;
+    font-weight: 500;
+    color: #363535;
+  }
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+}
+
+.rating {
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+  }
+}

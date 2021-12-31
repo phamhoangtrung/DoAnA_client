@@ -1,11 +1,17 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, Inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Product } from 'src/app/models/product.model';
 import { Selection } from 'src/app/models/share.model';
 import { ApiService } from 'src/app/service/api.service';
 import { environment } from 'src/environments/environment';
+import { noWhiteSpaceValidator } from '../../validator/noWhiteSpace.validator';
 import { numberValidator } from '../../validator/number.validator';
 import { rangeValidator } from '../../validator/range.validator';
 
@@ -18,6 +24,9 @@ export class DialogProductComponent implements OnInit {
   productForm!: FormGroup;
   file!: File;
   selection!: Selection;
+  url: any;
+  msg = '';
+
   constructor(
     private builder: FormBuilder,
     public dialogRef: MatDialogRef<DialogProductComponent>,
@@ -29,11 +38,11 @@ export class DialogProductComponent implements OnInit {
   ngOnInit(): void {
     this.selection = this.api.selection;
     this.buildForm();
-  }
-  url: any; //Angular 11, for stricter type
-  msg = '';
+    console.log(this.selection);
 
-  //selectFile(event) { //Angular 8
+    this.url = this.data?.imageUrl || '';
+  }
+
   selectFile(event: any) {
     //Angular 11, for stricter type
     this.file = event.target.files[0] as File;
@@ -64,10 +73,18 @@ export class DialogProductComponent implements OnInit {
   buildForm() {
     this.productForm = this.builder.group({
       name: [this.getDefault('name'), Validators.required],
-      price: [this.getDefault('price'), [Validators.required, numberValidator]],
+      price: [
+        this.getDefault('price'),
+        [Validators.required, numberValidator, noWhiteSpaceValidator],
+      ],
       sale: [
         this.getDefault('sale'),
-        [Validators.required, numberValidator, rangeValidator(0, 99)],
+        [
+          Validators.required,
+          numberValidator,
+          rangeValidator(0, 99),
+          noWhiteSpaceValidator,
+        ],
       ],
       type: [this.getDefault('type'), Validators.required],
       gender: [this.getDefault('gender'), Validators.required],
@@ -109,33 +126,35 @@ export class DialogProductComponent implements OnInit {
     this.dialogRef.close(true);
     const formData = new FormData();
     formData.append('file', this.file);
-    this.http
-      .post(environment.baseUrl + '/uploadphoto', formData)
-      .subscribe((res: any) => {
-        if (this.data) {
-          this.api
-            .updateProduct(this.data._id, {
-              ...this.productForm.value,
-              imageUrl: res.filename,
-            })
-            .subscribe();
-        } else {
+
+    if (this.data) {
+      if (this.file)
+        this.http
+          .post(environment.baseUrl + '/uploadphoto', formData)
+          .subscribe((res: any) => {
+            this.api
+              .updateProduct(this.data._id, {
+                ...this.productForm.value,
+                imageUrl: res.filename,
+              })
+              .subscribe();
+          });
+      else {
+        this.api
+          .updateProduct(this.data._id, this.productForm.value)
+          .subscribe();
+      }
+    } else {
+      this.http
+        .post(environment.baseUrl + '/uploadphoto', formData)
+        .subscribe((res: any) => {
           this.api
             .createProduct({
               ...this.productForm.value,
               imageUrl: res.filename,
             })
             .subscribe();
-        }
-      });
+        });
+    }
   }
 }
-
-// name: string;
-// price: number;
-// rating: number;
-// sale: number;
-// type: 'men' | 'women';
-// createdAt: string;
-// updatedAt: string;
-// _id: string;

@@ -41,6 +41,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
     'name',
     'rating',
     'price',
+    'totalSell',
     'type',
     'gender',
     'sale',

@@ -1,6 +1,14 @@
 <div class="container">
   <div class="row">
-    <div class="col-12">
+    <div class="col-12 mb-4">
+      <button routerLink="/cart" class="btn btn-primary">
+        <mat-icon>arrow_back_ios</mat-icon>
+        <span>
+          Back Ordering To Cart
+        </span>
+      </button>
+    </div>
+    <div class="col-12 mb-5">
       <mat-accordion>
         <mat-expansion-panel hideToggle *ngFor="let cart of carts">
           <mat-expansion-panel-header>
@@ -8,9 +16,17 @@
               <mat-icon mat-list-icon>shopping_cart</mat-icon>
             </mat-panel-title>
             <mat-panel-description>
-              Date {{cart.createdAt|date }} ({{cart.status}})
+              <div class="chip">
+                <span>
+                  {{cart.createdAt | date:'h:mm a, M/d/yy' }}
+                </span>
+                <mat-chip-list>
+                  <mat-chip [color]="cart.status==='accepted'?'primary':'warn'" selected>{{cart.status}}</mat-chip>
+                </mat-chip-list>
+              </div>
             </mat-panel-description>
           </mat-expansion-panel-header>
+
           <table mat-table [dataSource]="cart.orderedProduct" class="mat-elevation-z8 demo-table">
             <ng-container *ngFor="let column of columns" [matColumnDef]="column.columnDef">
               <th mat-header-cell *matHeaderCellDef>
@@ -18,7 +34,7 @@
               </th>
               <td mat-cell *matCellDef="let row">
                 <div *ngIf="column.columnDef === 'img'">
-                  <img [src]="row.imageUrl" [width]="50" />
+                  <img class="img img--round" [src]="row.imageUrl" />
                 </div>
                 <div *ngIf="column.columnDef !== 'img'">
                   {{column.cell(row)}}
@@ -30,15 +46,13 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
           </table>
+
+          <div class="rating__footer mt-4">
+            <span><strong>Total: </strong>{{cart.total}}$</span>
+            <button *ngIf="!cart.isRated" mat-raised-button color="primary" (click)="rate(cart)">Rating</button>
+          </div>
         </mat-expansion-panel>
       </mat-accordion>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-12 d-flex justify-content-center">
-      <button routerLink="/cart" class="btn btn-primary mt-3">
-        Back Ordering To Carts
-      </button>
     </div>
   </div>
 </div>

@@ -1,0 +1,35 @@
+<div class="container ">
+  <div class="row mb-3">
+    <h1 class="col-12">
+      Rating:
+    </h1>
+    <div class="col-4" *ngFor="let item of prodRatingList">
+      <mat-card class="example-card">
+        <mat-card-header>
+          <mat-card-title>{{item.name}}</mat-card-title>
+          <mat-card-subtitle>{{item.type}}</mat-card-subtitle>
+        </mat-card-header>
+        <img height="150" class="card-img" [src]="item.imageUrl">
+        <mat-card-content>
+          <br>
+          <app-staring [selectedRating]="item.rating" (onStartChange)="rate($event,item)"></app-staring>
+        </mat-card-content>
+      </mat-card>
+
+    </div>
+    <div class="col-4">
+      <mat-card class="example-card">
+        <mat-card-header>
+          <mat-card-title class="text-center">Please give us your rating</mat-card-title>
+        </mat-card-header>
+
+        <mat-card-actions>
+          <div class="rating">
+            <button mat-raised-button color="warn" mat-dialog-close>Cancel</button>
+            <button mat-raised-button color="primary" (click)="sendRate()">Rating</button>
+          </div>
+        </mat-card-actions>
+      </mat-card>
+    </div>
+  </div>
+</div>

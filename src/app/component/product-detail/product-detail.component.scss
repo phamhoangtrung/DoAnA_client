@@ -61,8 +61,15 @@
   opacity: 1;
 }
 
+.row {
+  margin: 0 10%;
+}
+
 .img-fluid {
-  width: 80%;
+  // width: 80%;
+  // display: block;
+  // margin: 0 auto;
+  max-height: 60vh;
 }
 
 .sale {

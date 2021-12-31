@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { DialogData } from 'src/app/models/dialog.model';
 import { CartAdmin } from 'src/app/models/product.model';
 import { CartService } from 'src/app/service/cart.service';
+import { DialogService } from 'src/app/service/dialog.service';
 import { IndicatorService } from 'src/app/service/indicator.service';
 import { columns } from './cart-list-column';
 
@@ -16,7 +18,8 @@ export class CartListComponent implements OnInit {
 
   constructor(
     private cartService: CartService,
-    private indicatorService: IndicatorService
+    private indicatorService: IndicatorService,
+    private dialogService: DialogService
   ) {}
 
   ngOnInit(): void {
@@ -27,14 +30,31 @@ export class CartListComponent implements OnInit {
   getAllCart() {
     this.cartService.getAllCart().subscribe((res: any) => {
       this.carts = res.carts.map((c: any) => {
-        const orderedProduct = c.orderedProduct.map((o: any, i: number) => ({
-          ...o,
-          index: i + 1,
-        }));
-
+        const orderedProduct = addIndex(c.orderedProduct);
         return { ...c, orderedProduct };
       });
       this.indicatorService.set(false);
     });
   }
+
+  rate(cart: CartAdmin) {
+    this.dialogService.openRatingTableDialog(cart).subscribe((rs) => {
+      if (rs) {
+        this.carts = this.carts.map((c) => {
+          if (c._id === cart._id) c.isRated = true;
+          return c;
+        });
+        const data: DialogData = {
+          title: 'Rating',
+          body: 'Rating successfully',
+          type: 'confirm',
+        };
+        this.dialogService.openMessageDialog(data);
+      }
+    });
+  }
 }
+
+const addIndex = (data: Object[]) => {
+  return data.map((d, i) => ({ ...d, index: i + 1 }));
+};

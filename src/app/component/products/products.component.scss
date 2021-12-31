@@ -39,6 +39,10 @@
       transform: scale(1.1);
     }
   }
+  &.no-pad {
+    margin-left: 0;
+    margin-right: 0;
+  }
 }
 
 .form-control {
@@ -60,7 +64,8 @@
   font-weight: 500;
   color: gray;
   text-align: center;
-  margin-top: 2em;
+  margin-top: 1em;
+  padding: 1em 0;
 }
 
 mat-paginator {

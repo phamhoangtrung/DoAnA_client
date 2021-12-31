@@ -1,14 +1,14 @@
 <div class="container mb-5">
-  <div class="row card">
-    <div class="col-md-12">
+  <div class="row card no-pad">
+    <div class="col-12">
       <div class="form-group mb-1">
         <div class="chips">
           <mat-label>Type:</mat-label>
           <mat-chip-list *ngIf="selection" aria-label="Type selection">
-            <mat-chip color="primary" (click)="handleSelectionChange('type','')" [selected]="selected.type===''">all
+            <mat-chip color="primary" (click)="handleSelectionChange('type', '')" [selected]="selected.type === ''">all
             </mat-chip>
-            <mat-chip (click)="handleSelectionChange('type' ,type)" *ngFor="let type of selection.type"
-              [selected]="selected.type===type">{{type}}</mat-chip>
+            <mat-chip (click)="handleSelectionChange('type', type)" *ngFor="let type of selection.type"
+              [selected]="selected.type === type">{{ type }}</mat-chip>
           </mat-chip-list>
         </div>
       </div>
@@ -16,38 +16,37 @@
         <div class="chips">
           <mat-label>Gender:</mat-label>
           <mat-chip-list *ngIf="selection" aria-label="Type selection">
-            <mat-chip (click)="handleSelectionChange('gender','')" [selected]="selected.gender===''">all</mat-chip>
-            <mat-chip (click)="handleSelectionChange('gender',gender)" *ngFor="let gender of selection.gender"
-              [selected]="selected.gender===gender">{{gender}}
+            <mat-chip (click)="handleSelectionChange('gender', '')" [selected]="selected.gender === ''">all</mat-chip>
+            <mat-chip (click)="handleSelectionChange('gender', gender)" *ngFor="let gender of selection.gender"
+              [selected]="selected.gender === gender">{{ gender }}
             </mat-chip>
           </mat-chip-list>
         </div>
       </div>
-
       <div class="form-group mb-3">
         <div class="chips">
           <mat-label>Price:</mat-label>
           <mat-chip-list aria-label="Type selection">
-            <mat-chip (click)="handleSelectionChange('sort','')" [selected]="selected.sort===''">none</mat-chip>
-            <mat-chip (click)="handleSelectionChange('sort','price')" [selected]="selected.sort==='price'">low to high
+            <mat-chip (click)="handleSelectionChange('sort', '')" [selected]="selected.sort === ''">none</mat-chip>
+            <mat-chip (click)="handleSelectionChange('sort', 'price')" [selected]="selected.sort === 'price'">low to
+              high
             </mat-chip>
-            <mat-chip (click)="handleSelectionChange('sort','-price')" [selected]="selected.sort==='-price'">high to
+            <mat-chip (click)="handleSelectionChange('sort', '-price')" [selected]="selected.sort === '-price'">high to
               low
             </mat-chip>
           </mat-chip-list>
         </div>
 
         <div class="functbn">
-
-          <button color="primary" mat-raised-button (click)="resetFilter()">Reset Filter</button>
-          <!-- <button color="primary" mat-raised-button (click)="startFilter()">Confirm</button> -->
+          <button color="primary" mat-raised-button (click)="resetFilter()">
+            Reset Filter
+          </button>
           <ng-container *ngIf="authService.isAdmin">
             <button color="primary" mat-raised-button (click)="createProduct()">
               <mat-icon>add</mat-icon>
             </button>
           </ng-container>
         </div>
-
       </div>
       <div class="form-group">
         <mat-form-field class="input" appearance="fill">
@@ -62,37 +61,38 @@
             <mat-icon aria-hidden="false" aria-label="Example home icon">search</mat-icon>
           </button>
         </mat-form-field>
-
       </div>
     </div>
   </div>
   <div class="row">
     <ng-container *ngIf="!authService.isAdmin">
       <ng-container *ngFor="let item of productList">
-        <div class=" col-md-4 col-l-4 col-sm-6">
+        <div class="col-lg-4 col-6">
           <div class="card">
-            <h5 class="field title"><span>{{ item.name }}</span> </h5>
+            <h5 class="field title mb-3 mt-2">
+              <span>{{ item.name }}</span>
+            </h5>
             <img [src]="item.imageUrl" [height]="200" class="item-image" />
             <app-staring [selectedRating]="item.rating" [disabled]="true"
-              (onStartChange)="handleStarChange($event,item._id)">
+              (onStartChange)="handleStarChange($event, item._id)">
             </app-staring>
             <p class="text-center"><strong>Price:</strong> {{ item.price }}$</p>
             <div class="prcsec">
               <mat-chip-list aria-label="Fish selection">
                 <mat-chip color="primary" selected>{{ item.gender }}</mat-chip>
                 <mat-chip color="accent" selected> {{ item.type }}</mat-chip>
-                <mat-chip [hidden]="item.sale === 0" color="warn" selected>{{ item.sale + "%" }}</mat-chip>
-
+                <mat-chip [hidden]="item.sale === 0" color="warn" selected>{{
+                  item.sale + "%"
+                }}</mat-chip>
               </mat-chip-list>
-              <!-- <app-badge [isHidden]="item.sale === 0" [content]="item.sale + '%'"></app-badge> -->
             </div>
 
-            <div class="fbtn">
+            <div class="fbtn mb-2">
               <button mat-raised-button color="primary" (click)="addToCart(item)">
                 Add To Cart
               </button>
 
-              <button mat-raised-button color="primary" [routerLink]="'/products/'+item._id">
+              <button mat-raised-button color="primary" [routerLink]="'/products/' + item._id">
                 View Product
               </button>
             </div>
@@ -102,21 +102,21 @@
     </ng-container>
 
     <ng-container *ngIf="authService.isAdmin">
-      <div class="col-12 pt-3">
+      <div class="col-12 pt-3 pb-3">
         <app-product-table [displayedColumns]="column" [productList]="productList" (remove)="removeItem($event)"
           (update)="updateProduct($event)">
         </app-product-table>
       </div>
     </ng-container>
-  </div>
-</div>
 
-<div class="footer" *ngIf="productList?.length !== 0; else elseBlock">
-  <mat-paginator #paginator [length]="length" [pageSize]="12" (page)="onPageChange($event)" aria-label="Select page">
-  </mat-paginator>
-</div>
-<ng-template #elseBlock>
-  <div class="col-12">
-    <h1 class="no-content">No item found.</h1>
+    <div class="col-12">
+      <mat-paginator *ngIf="productList?.length !== 0; else elseBlock" #paginator [length]="length" [pageSize]="12"
+        (page)="onPageChange($event)" aria-label="Select page">
+      </mat-paginator>
+    </div>
+
+    <ng-template #elseBlock>
+      <h1 class="card no-content">No item found.</h1>
+    </ng-template>
   </div>
-</ng-template>
+</div>

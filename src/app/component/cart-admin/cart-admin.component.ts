@@ -3,6 +3,7 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { MatDatepicker } from '@angular/material/datepicker';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { DialogData } from 'src/app/models/dialog.model';
 import { CartAdmin, CartProduct } from 'src/app/models/product.model';
 import { CartService } from 'src/app/service/cart.service';
 import { DialogService } from 'src/app/service/dialog.service';
@@ -67,17 +68,24 @@ export class CartAdminComponent implements OnInit {
   }
 
   acceptCart(cartId: string) {
-    this.indicatorService.set(true);
-    this.cartService.acceptCart(cartId).subscribe(() => {
-      this.getCart();
+    const dialogData: DialogData = {
+      title: 'Approve Cart',
+      body: `Do you want to change cart '${cartId}' status`,
+      type: 'option',
+    };
+
+    this.dialogService.openMessageDialog(dialogData).subscribe((rs) => {
+      if (rs) {
+        this.indicatorService.set(true);
+        this.cartService.acceptCart(cartId).subscribe(() => {
+          this.getCart();
+        });
+      }
     });
   }
 
   export() {
-    // if (!matPicker.startAt) return;
     const date = this.range.value.start + ',' + this.range.value.end;
-    // console.log(date);
-
     this.cartService.getAllCart(date).subscribe((res: any) => {
       this.dialogService
         .openProductTableDialog(res.carts, true)

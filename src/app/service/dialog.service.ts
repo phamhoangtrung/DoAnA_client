@@ -7,6 +7,7 @@ import { DialogProductComponent } from '../shared/components/dialog-product/dial
 import { CartAdmin, Product } from '../models/product.model';
 import { ProductTableDialogComponent } from '../shared/components/product-table-dialog/product-table-dialog.component';
 import { SnackBarComponent } from '../shared/components/snack-bar/snack-bar.component';
+import { RatingListComponent } from '../shared/components/rating-list/rating-list.component';
 
 @Injectable({
   providedIn: 'root',
@@ -49,9 +50,23 @@ export class DialogService {
     return this.dialog
       .open(ProductTableDialogComponent, {
         width: '1000px',
+        maxHeight: '500px',
+        minHeight: '100px',
+        data: { carts: data, isExport },
+        position: {
+          top: window.scrollY + 50 + 'px',
+        },
+      })
+      .afterClosed();
+  }
+
+  openRatingTableDialog(data: any) {
+    return this.dialog
+      .open(RatingListComponent, {
+        width: '1000px',
         // maxHeight: '80%',
         height: '80%',
-        data: { carts: data, isExport },
+        data,
         position: {
           top: window.scrollY + 50 + 'px',
         },

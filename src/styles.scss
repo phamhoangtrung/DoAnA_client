@@ -155,6 +155,7 @@ body {
       color: #ff4444;
     }
   }
+
   button {
     width: 100%;
     box-shadow: 0 0 20px rgba(8, 7, 16, 0.3);
@@ -207,4 +208,30 @@ table {
   border-radius: 15px;
   padding-top: 1em;
   padding-bottom: 1em;
+}
+
+.img {
+  display: inline-block;
+  margin: 0.5em 0;
+  object-fit: cover;
+  width: 50px;
+  height: 50px;
+  &--normal {
+    border-radius: 2px;
+  }
+  &--round {
+    border-radius: 50%;
+  }
+}
+
+.flex__center {
+  &--align {
+    display: flex;
+    align-self: center;
+  }
+
+  &--justify {
+    display: flex;
+    justify-content: center;
+  }
 }

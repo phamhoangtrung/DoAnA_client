@@ -17,7 +17,7 @@ const columns = [
   {
     columnDef: 'price',
     header: 'Price',
-    cell: (element: any) => `${element.price}`,
+    cell: (element: any) => `${element.price}$`,
   },
   {
     columnDef: 'quantity',
@@ -27,17 +27,12 @@ const columns = [
   {
     columnDef: 'sale',
     header: 'Sale',
-    cell: (element: any) => `${element.sale}`,
+    cell: (element: any) => `${element.sale}%`,
   },
   {
     columnDef: 'type',
     header: 'Type',
     cell: (element: any) => `${element.type}`,
-  },
-  {
-    columnDef: 'rating',
-    header: 'Rating',
-    cell: (element: any) => `${element.rating}`,
   },
 ];
 

@@ -1,0 +1,30 @@
+.row {
+  position: relative;
+  .col-1 {
+    position: absolute;
+    top: 0;
+    right: 0;
+    .button {
+      &--tool {
+        position: fixed;
+        button {
+          display: block;
+          margin-bottom: 1em;
+        }
+      }
+    }
+  }
+}
+
+.title {
+  margin-bottom: 1em;
+  h1 {
+    margin: 0;
+  }
+}
+
+.chip {
+  margin: 0 auto;
+  //   display: flex;
+  //   justify-content: space-around;
+}

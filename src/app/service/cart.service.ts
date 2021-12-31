@@ -60,18 +60,6 @@ export class CartService {
     this.getTotalPrice();
   }
 
-  changeRating(product: CartProduct, rating: number) {
-    const newList = this.cartItemList.map((p) => {
-      if (p._id === product._id) {
-        p = { ...p, rating };
-      }
-      return p;
-    });
-    this.cartItemList = newList;
-    this.setLocalData(newList);
-    this.productList.next(this.cartItemList);
-  }
-
   getTotalPrice(): number {
     return this.cartItemList.reduce(
       (acc, cur) => acc + cur.price * cur.quantity,

@@ -28,6 +28,7 @@ import { ProductTableComponent } from './shared/components/product-table/product
 import { ProductTableDialogComponent } from './shared/components/product-table-dialog/product-table-dialog.component';
 import { SnackBarComponent } from './shared/components/snack-bar/snack-bar.component';
 import { ProductDetailComponent } from './component/product-detail/product-detail.component';
+import { RatingListComponent } from './shared/components/rating-list/rating-list.component';
 
 @NgModule({
   declarations: [
@@ -51,6 +52,7 @@ import { ProductDetailComponent } from './component/product-detail/product-detai
     ProductTableDialogComponent,
     SnackBarComponent,
     ProductDetailComponent,
+    RatingListComponent,
   ],
   imports: [
     BrowserModule,

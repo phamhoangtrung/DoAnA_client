@@ -26,7 +26,6 @@ export class SigninComponent implements OnInit {
   }
 
   handleSubmit() {
-    console.log(this.signinForm.value);
     this.authService.signin(this.signinForm.value as UserSignin);
   }
 

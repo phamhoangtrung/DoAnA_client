@@ -117,8 +117,4 @@ export class CartComponent implements OnInit {
     if (product.quantity <= 1 && action === 'rmv') return;
     this.cartService.addToCart(product, action);
   }
-
-  onStartChange(product: CartProduct, rating: number) {
-    this.cartService.changeRating(product, rating);
-  }
 }

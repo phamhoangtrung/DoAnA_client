@@ -10,5 +10,8 @@ table {
   th,
   td {
     text-align: center;
+    mat-icon {
+      margin: 0 0.1em;
+    }
   }
 }
