@@ -10,6 +10,7 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { UserSignup } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/service/auth.service';
+import { UtilService } from 'src/app/service/util.service';
 import { passwordsMatchValidator } from 'src/app/shared/validator/mismatch.validator';
 import { numberValidator } from 'src/app/shared/validator/number.validator';
 import { rangeValidator } from 'src/app/shared/validator/range.validator';
@@ -22,7 +23,13 @@ import { rangeValidator } from 'src/app/shared/validator/range.validator';
 export class SignupComponent implements OnInit {
   signupForm!: FormGroup;
 
-  constructor(private builder: FormBuilder, public authService: AuthService) {}
+  constructor(
+    private builder: FormBuilder,
+    public authService: AuthService,
+    private utilService: UtilService
+  ) {
+    this.utilService.setDocumentTitle('Sign up');
+  }
 
   ngOnInit() {
     this.buildForm();

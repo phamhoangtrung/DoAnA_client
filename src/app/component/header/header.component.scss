@@ -74,7 +74,6 @@ a:active {
       opacity: 0;
     }
     & .hide-toggle {
-      // --ggs: 1.5;
       display: block;
       position: absolute;
       top: 20px;
@@ -106,4 +105,9 @@ a:active {
   font-weight: 600;
   // text-decoration: underline;
   text-transform: uppercase;
+}
+
+#logo {
+  height: 40px;
+  cursor: pointer;
 }

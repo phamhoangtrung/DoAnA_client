@@ -17,6 +17,7 @@ import { AuthService } from 'src/app/service/auth.service';
 import { CartService } from 'src/app/service/cart.service';
 import { DialogService } from 'src/app/service/dialog.service';
 import { IndicatorService } from 'src/app/service/indicator.service';
+import { UtilService } from 'src/app/service/util.service';
 import { Filter, Selection } from '../../models/share.model';
 
 @Component({
@@ -59,8 +60,11 @@ export class ProductsComponent implements OnInit, OnDestroy {
     private router: Router,
     private cartService: CartService,
     private indicatorService: IndicatorService,
-    private dialogService: DialogService
-  ) {}
+    private dialogService: DialogService,
+    private utilService: UtilService
+  ) {
+    utilService.setDocumentTitle('Product', 'page: 1');
+  }
 
   ngOnInit(): void {
     this.api.getSelection().subscribe((res) => {
@@ -117,6 +121,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
     let page;
     if (typeof e === 'number') page = e;
     else page = e.pageIndex + 1;
+
+    this.utilService.setDocumentTitle('Product', `page: ${page.toString()}`);
 
     this.indicatorService.set(true);
     this.api.getProduct(page).subscribe((rs) => {
@@ -175,6 +181,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   startFilter() {
     this.indicatorService.set(true);
     this.api.getProduct().subscribe((res) => {
+      this.paginatorRef?.firstPage();
       this.productList = this.addIndex(res.products);
       this.length = res.total;
       this.indicatorService.set(false);

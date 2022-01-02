@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/service/auth.service';
 import { CartService } from 'src/app/service/cart.service';
 import { DialogService } from 'src/app/service/dialog.service';
 import { IndicatorService } from 'src/app/service/indicator.service';
+import { UtilService } from 'src/app/service/util.service';
 import { IndicatorComponent } from 'src/app/shared/components/indicator/indicator.component';
 
 @Component({
@@ -35,8 +36,11 @@ export class CartComponent implements OnInit {
     private cartService: CartService,
     private authService: AuthService,
     private dialogService: DialogService,
-    private indicatorService: IndicatorService
-  ) {}
+    private indicatorService: IndicatorService,
+    private utilService: UtilService
+  ) {
+    this.utilService.setDocumentTitle('Cart');
+  }
 
   ngOnInit(): void {
     this.cartService.getProducts().subscribe((res: CartProduct[]) => {

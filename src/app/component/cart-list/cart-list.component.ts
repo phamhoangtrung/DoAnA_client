@@ -4,6 +4,7 @@ import { CartAdmin } from 'src/app/models/product.model';
 import { CartService } from 'src/app/service/cart.service';
 import { DialogService } from 'src/app/service/dialog.service';
 import { IndicatorService } from 'src/app/service/indicator.service';
+import { UtilService } from 'src/app/service/util.service';
 import { columns } from './cart-list-column';
 
 @Component({
@@ -19,8 +20,11 @@ export class CartListComponent implements OnInit {
   constructor(
     private cartService: CartService,
     private indicatorService: IndicatorService,
-    private dialogService: DialogService
-  ) {}
+    private dialogService: DialogService,
+    private utilService: UtilService
+  ) {
+    this.utilService.setDocumentTitle('Carts', 'List');
+  }
 
   ngOnInit(): void {
     this.indicatorService.set(true);

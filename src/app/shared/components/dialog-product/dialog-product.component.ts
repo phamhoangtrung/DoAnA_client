@@ -7,6 +7,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { retry, switchMap } from 'rxjs/operators';
 import { Product } from 'src/app/models/product.model';
 import { Selection } from 'src/app/models/share.model';
 import { ApiService } from 'src/app/service/api.service';
@@ -22,7 +23,7 @@ import { rangeValidator } from '../../validator/range.validator';
 })
 export class DialogProductComponent implements OnInit {
   productForm!: FormGroup;
-  file!: File;
+  file!: File | null;
   selection!: Selection;
   url: any;
   msg = '';
@@ -33,18 +34,16 @@ export class DialogProductComponent implements OnInit {
     private api: ApiService,
     private http: HttpClient,
     @Inject(MAT_DIALOG_DATA) public data: Product
-  ) {}
+  ) {
+    this.selection = this.api.selection;
+  }
 
   ngOnInit(): void {
-    this.selection = this.api.selection;
     this.buildForm();
-    console.log(this.selection);
-
     this.url = this.data?.imageUrl || '';
   }
 
   selectFile(event: any) {
-    //Angular 11, for stricter type
     this.file = event.target.files[0] as File;
     if (!this.file) {
       this.msg = 'You must select an image';
@@ -54,6 +53,7 @@ export class DialogProductComponent implements OnInit {
     var mimeType = this.file.type;
     if (mimeType.match(/image\/*/) == null) {
       this.msg = 'Only images are supported';
+      this.file = null;
       return;
     }
 
@@ -92,9 +92,7 @@ export class DialogProductComponent implements OnInit {
   }
 
   getDefault(key: keyof Product) {
-    if (this.data) {
-      return this.data[key];
-    }
+    if (this.data) return this.data[key];
     return '';
   }
 
@@ -123,38 +121,39 @@ export class DialogProductComponent implements OnInit {
   }
 
   handleSubmit() {
-    this.dialogRef.close(true);
-    const formData = new FormData();
-    formData.append('file', this.file);
+    if (!this.file) return;
+    const file = new FormData();
+    file.append('file', this.file);
 
+    this.http.post('http://localhost:3000/photo', file).subscribe(console.log);
     if (this.data) {
-      if (this.file)
-        this.http
-          .post(environment.baseUrl + '/uploadphoto', formData)
-          .subscribe((res: any) => {
-            this.api
-              .updateProduct(this.data._id, {
-                ...this.productForm.value,
-                imageUrl: res.filename,
-              })
-              .subscribe();
-          });
-      else {
+      if (this.file) {
+        this.createPhoto(file).pipe(
+          switchMap((res: any) => {
+            return this.api.updateProduct(this.data._id, {
+              ...this.productForm.value,
+              imageUrl: res.filename,
+            });
+          })
+        );
+      } else {
         this.api
           .updateProduct(this.data._id, this.productForm.value)
           .subscribe();
       }
     } else {
-      this.http
-        .post(environment.baseUrl + '/uploadphoto', formData)
-        .subscribe((res: any) => {
-          this.api
-            .createProduct({
-              ...this.productForm.value,
-              imageUrl: res.filename,
-            })
-            .subscribe();
-        });
+      this.createPhoto(file).pipe(
+        switchMap((res: any) => {
+          return this.api.createProduct({
+            ...this.productForm.value,
+            imageUrl: res.filename,
+          });
+        })
+      );
     }
+  }
+
+  createPhoto(file: FormData) {
+    return this.http.post(`${environment.baseUrl}/photo`, file);
   }
 }

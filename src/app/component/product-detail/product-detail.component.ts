@@ -7,6 +7,7 @@ import { AuthService } from 'src/app/service/auth.service';
 import { CartService } from 'src/app/service/cart.service';
 import { DialogService } from 'src/app/service/dialog.service';
 import { IndicatorService } from 'src/app/service/indicator.service';
+import { UtilService } from 'src/app/service/util.service';
 
 @Component({
   selector: 'app-product-detail',
@@ -22,7 +23,8 @@ export class ProductDetailComponent implements OnInit {
     public authService: AuthService,
     private cartService: CartService,
     private indicatorService: IndicatorService,
-    private dialogService: DialogService
+    private dialogService: DialogService,
+    private utilService: UtilService
   ) {}
 
   ngOnInit(): void {
@@ -36,8 +38,8 @@ export class ProductDetailComponent implements OnInit {
 
   getDetail(id: string) {
     this.apiService.getDetail(id).subscribe((res: any) => {
-      console.log(res.product);
       this.product = res.product;
+      this.utilService.setDocumentTitle('Product', res.product.name);
     });
   }
 
