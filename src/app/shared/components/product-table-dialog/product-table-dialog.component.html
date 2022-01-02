@@ -2,6 +2,9 @@
   <div class="title flex__center--align">
     <mat-icon>shopping_bag</mat-icon>
     <h1>Cart:</h1>
+    <mat-chip-list *ngIf="data.carts.length>1">
+      <mat-chip selected color="accent"> Total: {{total}}$</mat-chip>
+    </mat-chip-list>
   </div>
   <div class="row">
     <div *ngFor="let cart of data.carts" class="col-11 mb-4">

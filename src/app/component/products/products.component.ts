@@ -189,6 +189,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   }
 
   resetFilter() {
+    this.searchTerm.setValue('');
     this.selected = {
       type: '',
       sort: '',

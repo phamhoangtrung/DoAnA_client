@@ -8,6 +8,7 @@ import { CartAdmin, Product } from 'src/app/models/product.model';
   styleUrls: ['./product-table-dialog.component.scss'],
 })
 export class ProductTableDialogComponent implements OnInit {
+  total = 0;
   constructor(
     public dialogRef: MatDialogRef<ProductTableDialogComponent>,
     @Inject(MAT_DIALOG_DATA)
@@ -20,6 +21,8 @@ export class ProductTableDialogComponent implements OnInit {
       }));
       return { ...d, orderedProduct };
     });
+
+    this.total = this.data.carts.reduce((acc, cur) => acc + cur.total, 0);
   }
   column = ['no', 'img', 'name', 'rating', 'price', 'type', 'gender', 'sale'];
 

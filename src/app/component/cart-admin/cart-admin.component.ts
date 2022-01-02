@@ -97,8 +97,27 @@ export class CartAdminComponent implements OnInit {
             const endDate = new Date(this.range.value.end).toLocaleDateString(
               'en-US'
             );
+
+            const totalMoney = res.carts.reduce(
+              (acc: number, cur: any) => acc + cur.total,
+              0
+            );
+            const exportData = res.carts.map((c: any) => {
+              return {
+                status: c.status,
+                isRated: c.isRated,
+                money: c.total + '$',
+                cartId: c._id,
+                customerId: c.customerId,
+                createdAt: c.createdAt,
+                updatedAt: c.updatedAt,
+                email: c.customerEmail,
+                totalMoney,
+              };
+            });
+
             this.exportService.exportExcel(
-              res.carts,
+              exportData,
               `Cart-${startDate}-to-${endDate}`
             );
           }
