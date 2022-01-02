@@ -93,6 +93,6 @@
 
 <div class="actions mt-3">
   <button mat-raised-button color="warn" (click)="onNoClick()">Cancel</button>
-  <button mat-raised-button color="primary" (click)="handleSubmit()" [disabled]="!productForm.valid || !file"
-    cdkFocusInitial>OK</button>
+  <button mat-raised-button color="primary" (click)="handleSubmit()"
+    [disabled]="!productForm.valid || !url || isDisable" cdkFocusInitial>OK</button>
 </div>

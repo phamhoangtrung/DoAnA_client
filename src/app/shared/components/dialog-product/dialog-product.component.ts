@@ -23,10 +23,11 @@ import { rangeValidator } from '../../validator/range.validator';
 })
 export class DialogProductComponent implements OnInit {
   productForm!: FormGroup;
-  file!: File | null;
+  file!: any;
   selection!: Selection;
   url: any;
   msg = '';
+  isDisable = false;
 
   constructor(
     private builder: FormBuilder,
@@ -121,39 +122,48 @@ export class DialogProductComponent implements OnInit {
   }
 
   handleSubmit() {
-    if (!this.file) return;
+    this.isDisable = true;
+
     const file = new FormData();
     file.append('file', this.file);
-
-    this.http.post('http://localhost:3000/photo', file).subscribe(console.log);
     if (this.data) {
       if (this.file) {
-        this.createPhoto(file).pipe(
+        this.createPhoto(file)
+          .pipe(
+            switchMap((res: any) => {
+              return this.api.updateProduct(this.data._id, {
+                ...this.productForm.value,
+                imageUrl: res.filename,
+              });
+            })
+          )
+          .subscribe(() => {
+            this.dialogRef.close(true);
+          });
+      } else {
+        this.api
+          .updateProduct(this.data._id, this.productForm.value)
+          .subscribe(() => {
+            this.dialogRef.close(true);
+          });
+      }
+    } else {
+      this.createPhoto(file)
+        .pipe(
           switchMap((res: any) => {
-            return this.api.updateProduct(this.data._id, {
+            return this.api.createProduct({
               ...this.productForm.value,
               imageUrl: res.filename,
             });
           })
-        );
-      } else {
-        this.api
-          .updateProduct(this.data._id, this.productForm.value)
-          .subscribe();
-      }
-    } else {
-      this.createPhoto(file).pipe(
-        switchMap((res: any) => {
-          return this.api.createProduct({
-            ...this.productForm.value,
-            imageUrl: res.filename,
-          });
-        })
-      );
+        )
+        .subscribe(() => {
+          this.dialogRef.close(true);
+        });
     }
   }
 
   createPhoto(file: FormData) {
-    return this.http.post(`${environment.baseUrl}/photo`, file);
+    return this.http.post(`${environment.apiUrl}/photo`, file);
   }
 }
