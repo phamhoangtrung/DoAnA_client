@@ -45,20 +45,23 @@ export class DialogProductComponent implements OnInit {
   }
 
   selectFile(event: any) {
+
+    //get file 0
     this.file = event.target.files[0] as File;
     if (!this.file) {
       this.msg = 'You must select an image';
       return;
     }
 
-    var mimeType = this.file.type;
+    const mimeType = this.file.type;
+    //  check file type
     if (mimeType.match(/image\/*/) == null) {
       this.msg = 'Only images are supported';
       this.file = null;
       return;
     }
 
-    var reader = new FileReader();
+    const reader = new FileReader();
     reader.readAsDataURL(this.file);
 
     reader.onload = (_event: any) => {
@@ -93,6 +96,7 @@ export class DialogProductComponent implements OnInit {
   }
 
   getDefault(key: keyof Product) {
+    // get default value in update mode and empty string if create mode
     if (this.data) return this.data[key];
     return '';
   }
@@ -128,38 +132,29 @@ export class DialogProductComponent implements OnInit {
     file.append('file', this.file);
     if (this.data) {
       if (this.file) {
+        // if have new file => create file and update data
         this.createPhoto(file)
-          .pipe(
-            switchMap((res: any) => {
-              return this.api.updateProduct(this.data._id, {
-                ...this.productForm.value,
-                imageUrl: res.filename,
-              });
-            })
-          )
-          .subscribe(() => {
-            this.dialogRef.close(true);
-          });
-      } else {
-        this.api
-          .updateProduct(this.data._id, this.productForm.value)
-          .subscribe(() => {
-            this.dialogRef.close(true);
-          });
-      }
-    } else {
-      this.createPhoto(file)
-        .pipe(
-          switchMap((res: any) => {
-            return this.api.createProduct({
+          .pipe(switchMap((res: any) => {
+            return this.api.updateProduct(this.data._id, {
               ...this.productForm.value,
               imageUrl: res.filename,
             });
-          })
-        )
-        .subscribe(() => {
+          })).subscribe(() => { this.dialogRef.close(true); });
+      } else {
+        // if have new file => update data
+        this.api.updateProduct(this.data._id, this.productForm.value).subscribe(() => {
           this.dialogRef.close(true);
         });
+      }
+    } else {
+      // create file and create data
+      this.createPhoto(file)
+        .pipe(switchMap((res: any) => {
+          return this.api.createProduct({
+            ...this.productForm.value,
+            imageUrl: res.filename,
+          });
+        })).subscribe(() => { this.dialogRef.close(true); });
     }
   }
 

@@ -7,8 +7,6 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 
-import { FilterPipe } from './shared/filter.pipe';
-
 import { HeaderComponent } from './component/header/header.component';
 import { CartComponent } from './component/cart/cart.component';
 import { UserAdminComponent } from './component/user-admin/user-admin.component';
@@ -17,7 +15,6 @@ import { SigninComponent } from './component/signin/signin.component';
 import { SignupComponent } from './component/signup/signup.component';
 import { IndicatorComponent } from './shared/components/indicator/indicator.component';
 import { DialogComponent } from './shared/components/dialog/dialog.component';
-import { BadgeComponent } from './shared/components/badge/badge.component';
 import { DialogProductComponent } from './shared/components/dialog-product/dialog-product.component';
 import { JwtInterceptor } from './service/jwt.interceptor';
 import { CartAdminComponent } from './component/cart-admin/cart-admin.component';
@@ -36,11 +33,9 @@ import { RatingListComponent } from './shared/components/rating-list/rating-list
     HeaderComponent,
     CartComponent,
     ProductsComponent,
-    FilterPipe,
     SigninComponent,
     SignupComponent,
     IndicatorComponent,
-    BadgeComponent,
     DialogComponent,
     DialogProductComponent,
     CartAdminComponent,
@@ -72,4 +67,4 @@ import { RatingListComponent } from './shared/components/rating-list/rating-list
   ],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }

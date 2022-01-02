@@ -44,7 +44,10 @@ export class CartComponent implements OnInit {
 
   ngOnInit(): void {
     this.cartService.getProducts().subscribe((res: CartProduct[]) => {
+      // Thêm id
       this.products = res.map((prod, i) => ({ ...prod, position: i + 1 }));
+
+      // Tính tổng tiền
       this.grandTotal = this.cartService.getTotalPrice().toFixed(2);
       this.grandTotalWithSale = this.cartService
         .getTotalPriceWithSale()

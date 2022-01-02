@@ -42,17 +42,19 @@ export class CartService {
   }
 
   addToCart(product: any, action?: 'add' | 'rmv') {
+    // Add product to list
     const addedProduct = this.cartItemList.find((i) => i._id === product._id);
     let newList;
     if (addedProduct) {
+      // +1 quantity if it exist in cart
       newList = this.cartItemList.map((item) => {
-        if (item._id === product._id)
-          item.quantity =
-            action === 'add' ? item.quantity + 1 : item.quantity - 1;
+        if (item._id === product._id) {
+          item.quantity = action === 'add' ? item.quantity + 1 : item.quantity - 1;
+        }
         return item;
       });
     } else {
-      newList = [...this.cartItemList, { ...product, quantity: 1, rating: 3 }];
+      newList = [...this.cartItemList, { ...product, quantity: 1 }];
     }
     this.cartItemList = newList;
     this.setLocalData(newList);
@@ -61,23 +63,15 @@ export class CartService {
   }
 
   getTotalPrice(): number {
-    return this.cartItemList.reduce(
-      (acc, cur) => acc + cur.price * cur.quantity,
-      0
-    );
+    return this.cartItemList.reduce((acc, cur) => acc + cur.price * cur.quantity, 0);
   }
 
   getTotalPriceWithSale(): number {
-    return this.cartItemList.reduce(
-      (acc, cur) => acc + cur.price * cur.quantity * (1 - cur.sale / 100),
-      0
-    );
+    return this.cartItemList.reduce((acc, cur) => acc + cur.price * cur.quantity * (1 - cur.sale / 100), 0);
   }
 
   removeCartItem(product: any) {
-    const newList = this.cartItemList.filter(
-      (item) => item._id !== product._id
-    );
+    const newList = this.cartItemList.filter((item) => item._id !== product._id);
     this.cartItemList = newList;
     this.setLocalData(newList);
     this.productList.next(this.cartItemList);
@@ -90,10 +84,7 @@ export class CartService {
   }
 
   createCart() {
-    const cart = this.cartItemList.map((c) => ({
-      productId: c._id,
-      quantity: c.quantity,
-    }));
+    const cart = this.cartItemList.map((c) => ({ productId: c._id, quantity: c.quantity }));
     return this.http.post(`${environment.baseUrl}/${this.model}`, cart);
   }
 
@@ -102,9 +93,6 @@ export class CartService {
   }
 
   acceptCart(cartId: string) {
-    return this.http.patch(
-      `${environment.baseUrl}/${this.model}/change-status/${cartId}`,
-      null
-    );
+    return this.http.patch(`${environment.baseUrl}/${this.model}/change-status/${cartId}`, null);
   }
 }

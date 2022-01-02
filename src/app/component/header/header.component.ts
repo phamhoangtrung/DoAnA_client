@@ -19,15 +19,14 @@ export class HeaderComponent implements OnInit {
     private cartService: CartService,
     public authService: AuthService,
     private dialogService: DialogService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.cartService.getProducts().subscribe((res) => {
-      this.totalItem = res.length;
-    });
+    this.cartService.getProducts().subscribe((res) => { this.totalItem = res.length; });
   }
 
   toggleMenu() {
+    // mobile mode
     if (this.navLinks.nativeElement.classList.contains('hide')) {
       this.navLinks.nativeElement.classList.remove('hide');
       this.navLinks.nativeElement.classList.toggle('show');
@@ -35,8 +34,7 @@ export class HeaderComponent implements OnInit {
   }
 
   hideToggle() {
-    console.log(this.navLinks);
-
+    // mobile mode
     this.navLinks.nativeElement.classList.toggle('hide');
   }
 
@@ -60,5 +58,4 @@ export class HeaderComponent implements OnInit {
       }
     });
   }
-  goToUser() {}
 }

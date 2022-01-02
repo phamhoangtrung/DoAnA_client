@@ -12,7 +12,7 @@ export class StaringComponent implements OnInit {
 
   stars!: any[];
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit(): void {
     this.stars = [
@@ -39,8 +39,8 @@ export class StaringComponent implements OnInit {
         icon: 'star',
       },
     ].map((s) => {
-      const isEdited =
-        this.selectedRating >= s.id ? 'star-gold star' : 'star-gray star';
+      // add initial class for star
+      const isEdited = this.selectedRating >= s.id ? 'star-gold star' : 'star-gray star';
       const className = this.disabled ? isEdited : `${isEdited} star-hover`;
       return { ...s, class: className };
     });
@@ -48,15 +48,15 @@ export class StaringComponent implements OnInit {
 
   selectStar(value: number): void {
     if (this.disabled) return;
+    // change star class < current start 
     this.stars.filter((star) => {
       if (star.id <= value) {
-        star.class = 'star-gold  star';
+        star.class = 'star-gold star';
       } else {
         star.class = 'star-gray star-hover star';
       }
       return star;
     });
     this.onStartChange.emit(value);
-    // this.selectedRating = value;
   }
 }

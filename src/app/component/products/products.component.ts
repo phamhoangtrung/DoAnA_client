@@ -117,6 +117,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
     }
   }
 
+  // gọi khi bấm phân trang hoặc khi filter
   onPageChange(e: PageEvent | number) {
     let page;
     if (typeof e === 'number') page = e;
@@ -168,11 +169,8 @@ export class ProductsComponent implements OnInit, OnDestroy {
     });
   }
 
-  handleStarChange(value: number, id: string) {
-    console.log(value, id);
-  }
-
   handleSelectionChange(key: keyof Omit<Filter, 'name'>, value: string) {
+    // gọi khi chọn filter
     this.selected[key] = value;
     this.api.setFilter({ [key]: value });
     this.startFilter();

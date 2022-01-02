@@ -110,8 +110,3 @@ export class SignupComponent implements OnInit {
     return this.signupForm.get('confirmPassword');
   }
 }
-
-/**
- *
- * @param form
- */

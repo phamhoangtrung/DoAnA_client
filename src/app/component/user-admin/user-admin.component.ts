@@ -3,6 +3,8 @@ import { UserService } from 'src/app/service/user.service';
 import { IndicatorService } from 'src/app/service/indicator.service';
 import { User } from 'src/app/models/user.model';
 import { AuthService } from 'src/app/service/auth.service';
+import { DialogData } from 'src/app/models/dialog.model';
+import { DialogService } from 'src/app/service/dialog.service';
 
 @Component({
   selector: 'app-user-admin',
@@ -25,6 +27,7 @@ export class UserAdminComponent implements OnInit {
   constructor(
     private userService: UserService,
     private indicatorService: IndicatorService,
+    private dialogService: DialogService,
     public authService: AuthService
   ) {}
 
@@ -46,8 +49,17 @@ export class UserAdminComponent implements OnInit {
 
   approveUser(user: User) {
     this.indicatorService.set(true);
-    this.userService.approveUser(user).subscribe(() => {
-      this.getAllUser();
+    const dialogData: DialogData = {
+      title: 'Approve User',
+      body: `Do you want to set user ${user.email} to admin`,
+      type: 'option',
+    };
+    this.dialogService.openMessageDialog(dialogData).subscribe((res) => {
+      if (res) {
+        this.userService.approveUser(user).subscribe(() => {
+          this.getAllUser();
+        });
+      }
     });
   }
 }

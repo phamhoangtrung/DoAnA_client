@@ -9,16 +9,15 @@ import { CartAdmin, Product } from 'src/app/models/product.model';
 })
 export class ProductTableDialogComponent implements OnInit {
   total = 0;
+
   constructor(
     public dialogRef: MatDialogRef<ProductTableDialogComponent>,
     @Inject(MAT_DIALOG_DATA)
     public data: { isExport: boolean; carts: CartAdmin[] }
   ) {
     this.data.carts = this.data.carts.map((d) => {
-      const orderedProduct = d.orderedProduct.map((p, i) => ({
-        ...p,
-        index: i + 1,
-      }));
+      // add index
+      const orderedProduct = d.orderedProduct.map((p, i) => ({ ...p, index: i + 1, }));
       return { ...d, orderedProduct };
     });
 
@@ -26,7 +25,7 @@ export class ProductTableDialogComponent implements OnInit {
   }
   column = ['no', 'img', 'name', 'rating', 'price', 'type', 'gender', 'sale'];
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onNoClick(): void {
     this.dialogRef.close();

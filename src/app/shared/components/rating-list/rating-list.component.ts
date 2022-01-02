@@ -16,19 +16,18 @@ export class RatingListComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA)
     public data: CartAdmin
   ) {
-    this.prodRatingList = data.orderedProduct.map((p: any) => ({
-      ...p,
-      rating: 3,
-    }));
+    // default rate per product =3 
+    this.prodRatingList = data.orderedProduct.map((p: any) => ({ ...p, rating: 3, }));
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
 
   rate(rating: number, item: any) {
+    // update rating if click star
     this.prodRatingList = this.prodRatingList.map((p: any) => {
       if (item._id === p._id) {
         p.rating = rating;
@@ -38,13 +37,7 @@ export class RatingListComponent implements OnInit {
   }
 
   sendRate() {
-    const data = this.prodRatingList.map(({ _id, rating, quantity }: any) => ({
-      _id,
-      rating,
-      quantity,
-    }));
-    this.apiService.sendRating(data, this.data._id).subscribe(() => {
-      this.dialogRef.close(true);
-    });
+    const data = this.prodRatingList.map(({ _id, rating, quantity }: any) => ({ _id, rating, quantity }));
+    this.apiService.sendRating(data, this.data._id).subscribe(() => { this.dialogRef.close(true); });
   }
 }

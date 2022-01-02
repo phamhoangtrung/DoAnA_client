@@ -52,24 +52,17 @@ export class AuthService {
   }
 
   checkEmailExist(email: string) {
-    return this.http.post<{ valid: boolean }>(
-      `${environment.baseUrl}/${this.model}/check-email`,
-      { email }
-    );
+    return this.http.post<{ valid: boolean }>(`${environment.baseUrl}/${this.model}/check-email`, { email });
   }
 
   signup(user: UserSignup) {
-    this.http
-      .post<User>(`${environment.baseUrl}/${this.model}/signup`, {
-        user,
-      })
+    this.http.post<User>(`${environment.baseUrl}/${this.model}/signup`, { user, })
       .pipe(
         map((res: any) => ({
           ...res.user,
           token: res.token,
         }))
-      )
-      .subscribe((res: User) => {
+      ).subscribe((res: User) => {
         this.setUser(res);
         this.user = res;
         this.router.navigate(['/']);
@@ -77,23 +70,20 @@ export class AuthService {
   }
 
   signin(user: UserSignin) {
-    this.http
-      .post<User>(`${environment.baseUrl}/${this.model}/signin`, {
-        user,
-      })
+    this.http.post<User>(`${environment.baseUrl}/${this.model}/signin`, { user, })
       .pipe(
         map((res: any) => ({
           ...res.user,
           token: res.token,
         }))
-      )
-      .subscribe({
+      ).subscribe({
         next: (res: User) => {
           this.setUser(res);
           this.user = res;
           this.router.navigate(['/']);
         },
         error: (err) => {
+          // Check error from server
           const dialogData: DialogData = {
             title: 'Error Notification',
             body: err.error.msg,
@@ -111,14 +101,10 @@ export class AuthService {
   }
 
   changeName(name: string) {
-    return this.http
-      .patch(`${environment.baseUrl}/${this.model}/change-name`, {
-        name,
-      })
+    return this.http.patch(`${environment.baseUrl}/${this.model}/change-name`, { name })
       .pipe(
         tap((res: any) => {
           const user = { ...this.user, ...res.customer };
-          console.log(user);
           this.user = user;
           this.setUser(user);
         })

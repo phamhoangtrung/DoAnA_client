@@ -30,9 +30,7 @@ export class ApiService {
 
   getProduct(page: number = 1) {
     const { name, gender, type, sort } = this.filter;
-    return this.http.get<ProductResponse>(
-      `${environment.baseUrl}/${this.model}?page=${page}&name=${name}&gender=${gender}&type=${type}&sort=${sort}`
-    );
+    return this.http.get<ProductResponse>(`${environment.baseUrl}/${this.model}?page=${page}&name=${name}&gender=${gender}&type=${type}&sort=${sort}`);
   }
 
   setFilter(filter: Filter) {
@@ -52,9 +50,7 @@ export class ApiService {
   }
 
   getSelection() {
-    return this.http.get<Selection>(
-      `${environment.baseUrl}/${this.model}/selection`
-    );
+    return this.http.get<Selection>(`${environment.baseUrl}/${this.model}/selection`);
   }
 
   resetFilter() {
@@ -71,9 +67,6 @@ export class ApiService {
   }
 
   sendRating(product: any, _id: string) {
-    return this.http.patch(`${environment.baseUrl}/${this.model}/rating`, {
-      product,
-      _id,
-    });
+    return this.http.patch(`${environment.baseUrl}/${this.model}/rating`, { product, _id, });
   }
 }

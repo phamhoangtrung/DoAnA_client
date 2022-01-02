@@ -73,8 +73,7 @@
               <span>{{ item.name }}</span>
             </h5>
             <img [src]="item.imageUrl" [height]="200" class="item-image" />
-            <app-staring [selectedRating]="item.rating" [disabled]="true"
-              (onStartChange)="handleStarChange($event, item._id)">
+            <app-staring [selectedRating]="item.rating" [disabled]="true">
             </app-staring>
             <p class="text-center"><strong>Price:</strong> {{ item.price }}$</p>
             <div class="prcsec">
